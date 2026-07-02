@@ -2,8 +2,8 @@ import type { NextConfig } from "next";
 
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.clerk.accounts.dev https://*.clerk.com https://clerk.ashutoshswamy.in https://checkout.razorpay.com https://challenges.cloudflare.com",
-  "script-src-elem 'self' 'unsafe-inline' https://*.clerk.accounts.dev https://*.clerk.com https://clerk.ashutoshswamy.in https://checkout.razorpay.com https://challenges.cloudflare.com",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.clerk.accounts.dev https://*.clerk.com https://clerk.ashutoshswamy.in https://checkout.razorpay.com https://cdn.razorpay.com https://challenges.cloudflare.com",
+  "script-src-elem 'self' 'unsafe-inline' https://*.clerk.accounts.dev https://*.clerk.com https://clerk.ashutoshswamy.in https://checkout.razorpay.com https://cdn.razorpay.com https://challenges.cloudflare.com",
   "worker-src 'self' blob:",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://img.clerk.com https://*.public.blob.vercel-storage.com",
