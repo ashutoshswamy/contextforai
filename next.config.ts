@@ -2,12 +2,12 @@ import type { NextConfig } from "next";
 
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.clerk.accounts.dev https://*.clerk.com https://checkout.razorpay.com",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.clerk.accounts.dev https://*.clerk.com https://clerk.ashutoshswamy.in https://checkout.razorpay.com",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://img.clerk.com https://*.public.blob.vercel-storage.com",
   "font-src 'self' data:",
-  "connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://api.razorpay.com https://lumberjack.razorpay.com",
-  "frame-src 'self' https://checkout.razorpay.com https://*.clerk.accounts.dev https://*.clerk.com",
+  "connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://clerk.ashutoshswamy.in https://api.razorpay.com https://lumberjack.razorpay.com",
+  "frame-src 'self' https://checkout.razorpay.com https://*.clerk.accounts.dev https://*.clerk.com https://clerk.ashutoshswamy.in",
   "frame-ancestors 'self'",
   "object-src 'none'",
   "base-uri 'self'",
