@@ -1,65 +1,92 @@
-import Image from "next/image";
+import type { Metadata } from "next";
+import { auth } from "@clerk/nextjs/server";
+import HeroText from "./components/HeroText";
+import HowItWorks from "./components/HowItWorks";
+import Footer from "./components/Footer";
+import EndpointsSection from "./components/EndpointsSection";
+import QuickstartSection from "./components/QuickstartSection";
+import PricingSection from "./components/PricingSection";
+import CTASection from "./components/CTASection";
+import Navbar from "./components/Navbar";
+import StackedSectionsWrapper from "./components/StackedSectionsWrapper";
 
-export default function Home() {
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
+
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "WebAPI",
+  name: "contextforai",
+  description:
+    "One API to extract Markdown, JSON, sitemaps, screenshots, and brand assets from any URL.",
+  url: "https://contextforai.ashutoshswamy.in",
+  documentation: "https://contextforai.ashutoshswamy.in/docs",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "INR",
+    description: "Free tier with 500 credits/month",
+  },
+};
+
+export default async function Home() {
+  const { userId } = await auth();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <div className="min-h-screen bg-bg text-ink overflow-x-hidden">
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
+      />
+      <Navbar isLoggedIn={!!userId} />
+
+      <StackedSectionsWrapper>
+        {/* Hero */}
+        <div className="stacked-panel relative z-[1] bg-bg min-h-screen flex flex-col justify-center shadow-[0_-15px_40px_rgba(0,0,0,0.4)]">
+          <section className="relative overflow-hidden w-full h-full flex flex-col justify-center">
+            {/* Subtle grid background */}
+            <div
+              className="absolute inset-0 hero-grid pointer-events-none"
+              id="hero-bg"
+              style={{ opacity: 0.8 }}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <div className="relative max-w-6xl w-full mx-auto px-4 sm:px-6 py-12 md:py-24">
+              <HeroText isLoggedIn={!!userId} />
+            </div>
+          </section>
         </div>
-      </main>
+
+        {/* Endpoints */}
+        <div className="stacked-panel relative z-[2] bg-bg min-h-screen flex flex-col justify-center shadow-[0_-15px_40px_rgba(0,0,0,0.4)]">
+          <EndpointsSection />
+        </div>
+
+        {/* How It Works */}
+        <div className="stacked-panel relative z-[3] bg-bg min-h-screen flex flex-col justify-center shadow-[0_-15px_40px_rgba(0,0,0,0.4)]">
+          <HowItWorks />
+        </div>
+
+        {/* Quickstart */}
+        <div className="stacked-panel relative z-[4] bg-bg min-h-screen flex flex-col justify-center shadow-[0_-15px_40px_rgba(0,0,0,0.4)]">
+          <QuickstartSection />
+        </div>
+
+        {/* Pricing */}
+        <div className="stacked-panel relative z-[5] bg-bg min-h-screen flex flex-col justify-center shadow-[0_-15px_40px_rgba(0,0,0,0.4)]">
+          <PricingSection isLoggedIn={!!userId} />
+        </div>
+
+        {/* CTA */}
+        <div className="stacked-panel relative z-[6] bg-bg min-h-screen flex flex-col justify-center shadow-[0_-15px_40px_rgba(0,0,0,0.4)]">
+          <CTASection isLoggedIn={!!userId} />
+        </div>
+      </StackedSectionsWrapper>
+
+      <div className="relative z-[7] bg-bg shadow-[0_-20px_40px_rgba(0,0,0,0.8)]">
+        <Footer />
+      </div>
     </div>
   );
 }
