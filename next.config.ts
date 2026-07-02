@@ -9,7 +9,7 @@ const csp = [
   "img-src 'self' data: blob: https://img.clerk.com https://*.public.blob.vercel-storage.com",
   "font-src 'self' data:",
   "connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://clerk.ashutoshswamy.in https://api.razorpay.com https://lumberjack.razorpay.com https://challenges.cloudflare.com",
-  "frame-src 'self' https://checkout.razorpay.com https://*.clerk.accounts.dev https://*.clerk.com https://clerk.ashutoshswamy.in https://challenges.cloudflare.com",
+  "frame-src 'self' https://checkout.razorpay.com https://api.razorpay.com https://*.clerk.accounts.dev https://*.clerk.com https://clerk.ashutoshswamy.in https://challenges.cloudflare.com",
   "frame-ancestors 'self'",
   "object-src 'none'",
   "base-uri 'self'",
