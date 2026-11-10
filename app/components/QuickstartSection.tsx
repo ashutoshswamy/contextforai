@@ -1,39 +1,32 @@
 "use client";
 
-import { useRef, useState, useLayoutEffect } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
+import { sileo } from "sileo";
+
+import { useState } from "react";
 import { Clipboard, Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Badge } from "@/components/ui/badge";
 
-gsap.registerPlugin(ScrollTrigger);
-
-// VS Code dark theme colors
+// Syntax hues are drawn from the three glasses, pulled toward ink so they hold contrast on both grounds.
+const mix = (v: string) => `color-mix(in oklab, var(${v}) 78%, var(--ink))`;
 const C = {
-  keyword: "#569CD6",
-  string: "#CE9178",
-  flag: "#9CDCFE",
-  url: "#4EC9B0",
-  plain: "#D4D4D4",
+  keyword: mix("--l-markdown"),
+  string: mix("--l-json"),
+  flag: "var(--warn)",
+  url: mix("--l-markdown"),
+  plain: "var(--ink)",
 } as const;
-
 type TokType = keyof typeof C;
 
 const KW: Record<string, Set<string>> = {
   curl: new Set(["curl", "POST", "GET"]),
   node: new Set(["const", "await", "fetch", "method", "headers", "body", "console", "log", "JSON", "stringify"]),
   python: new Set(["import", "print"]),
-  go: new Set(["package", "main", "import", "func", "map", "string", "fmt", "bytes", "defer"]),
+  go: new Set(["package", "main", "import", "func", "map", "string", "defer"]),
 };
 
-function highlight(code: string, lang: string): React.ReactNode {
+function highlight(code: string, lang: string) {
   const kws = KW[lang] ?? new Set<string>();
+  const re = /("(?:[^"\\]|\\.)*")|('(?:[^'\\]|\\.)*')|(https?:\/\/[^\s'"\\]+)|(-{1,2}[A-Za-z][A-Za-z0-9-]*)|(\b[A-Za-z_][A-Za-z0-9_]*\b)|([\s\S])/g;
   const parts: { type: TokType; text: string }[] = [];
-  const re =
-    /("(?:[^"\\]|\\.)*")|('(?:[^'\\]|\\.)*')|(https?:\/\/[^\s'"\\]+)|(-{1,2}[A-Za-z][A-Za-z0-9-]*)|(\b[A-Za-z_][A-Za-z0-9_]*\b)|([^])/g;
   let m: RegExpExecArray | null;
   while ((m = re.exec(code)) !== null) {
     if (m[1] || m[2]) parts.push({ type: "string", text: m[0] });
@@ -42,9 +35,7 @@ function highlight(code: string, lang: string): React.ReactNode {
     else if (m[5]) parts.push({ type: kws.has(m[0]) ? "keyword" : "plain", text: m[0] });
     else parts.push({ type: "plain", text: m[0] });
   }
-  return parts.map((p, i) => (
-    <span key={i} style={{ color: C[p.type] }}>{p.text}</span>
-  ));
+  return parts.map((p, i) => <span key={i} style={{ color: C[p.type] }}>{p.text}</span>);
 }
 
 const TABS = [
@@ -53,7 +44,6 @@ const TABS = [
   { label: "Python", key: "python" },
   { label: "Go", key: "go" },
 ] as const;
-
 type TabKey = (typeof TABS)[number]["key"];
 
 const SNIPPETS: Record<TabKey, string> = {
@@ -104,242 +94,76 @@ func main() {
 }`,
 };
 
-const RESPONSE_JSON = `{
+const RESPONSE = `{
   "url": "https://example.com",
   "title": "Example Domain",
   "markdown": "# Example Domain\\n\\nThis domain is for...",
-  "wordCount": 17,
-  "extractedAt": "2026-07-01T10:00:00Z"
+  "wordCount": 17
 }`;
 
 const STEPS = [
-  {
-    title: "Get your key",
-    body: "Sign up, copy your Bearer token from the dashboard.",
-  },
-  {
-    title: "Pick an endpoint",
-    body: "/v1/markdown  /v1/json  /v1/sitemap  /v1/fonts  /v1/screenshot  /v1/branding",
-  },
-  {
-    title: "POST a URL",
-    body: "That's the entire integration.",
-  },
+  { title: "Get a key", body: "Sign up and copy your Bearer token from the dashboard." },
+  { title: "Send a URL", body: "POST it to any endpoint. We fetch the page server-side and extract what you asked for." },
+  { title: "Use the output", body: "Feed Markdown to your model, store the JSON, or save the screenshot." },
 ];
 
 export default function QuickstartSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const borderRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const codePanelRef = useRef<HTMLDivElement>(null);
-  const responseRef = useRef<HTMLPreElement>(null);
-  const badgeRef = useRef<HTMLSpanElement>(null);
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-
-  const [activeTab, setActiveTab] = useState(0);
-  const [fading, setFading] = useState(false);
+  const [tab, setTab] = useState<TabKey>("curl");
   const [copied, setCopied] = useState(false);
-  const [underline, setUnderline] = useState({ left: 0, width: 0 });
 
-  useLayoutEffect(() => {
-    const tab = tabRefs.current[activeTab];
-    if (tab) setUnderline({ left: tab.offsetLeft, width: tab.offsetWidth });
-  }, [activeTab]);
-
-  function switchTab(i: number) {
-    if (i === activeTab) return;
-    setFading(true);
-    setTimeout(() => {
-      setActiveTab(i);
-      setFading(false);
-    }, 80);
-  }
-
-  async function handleCopy() {
+  async function copy() {
     try {
-      await navigator.clipboard.writeText(SNIPPETS[TABS[activeTab].key]);
+      await navigator.clipboard.writeText(SNIPPETS[tab]);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
+      sileo.success({ title: "Copied to clipboard" });
     } catch {
-      // clipboard API unavailable
+      sileo.error({ title: "Copy failed" });
     }
   }
 
-  useGSAP(() => {
-    const steps = stepRefs.current.filter(Boolean) as HTMLDivElement[];
-    const borders = borderRefs.current.filter(Boolean) as HTMLDivElement[];
-    const panel = codePanelRef.current;
-    const badge = badgeRef.current;
-    const responseEl = responseRef.current;
-
-    const mm = gsap.matchMedia();
-
-    mm.add("(prefers-reduced-motion: reduce)", () => {
-      gsap.set(steps, { x: 0, opacity: 1 });
-      gsap.set(borders, { scaleY: 1 });
-      if (panel) gsap.set(panel, { clipPath: "inset(0 0 0% 0)" });
-      if (responseEl) gsap.set(responseEl.querySelectorAll("span"), { opacity: 1 });
-      if (badge) gsap.set(badge, { opacity: 1, color: "var(--color-go)" });
-    });
-
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      gsap.set(steps, { x: -16, opacity: 0 });
-      gsap.set(borders, { scaleY: 0, transformOrigin: "top center" });
-      if (panel) gsap.set(panel, { clipPath: "inset(0 0 100% 0)" });
-      if (responseEl) gsap.set(responseEl.querySelectorAll("span"), { opacity: 0 });
-      if (badge) gsap.set(badge, { opacity: 0, color: "var(--color-ink)" });
-
-      const tl = gsap.timeline({ paused: true });
-
-      // 1. Steps + left borders simultaneously
-      tl.to(steps, { x: 0, opacity: 1, duration: 0.5, stagger: 0.15, ease: "power2.out" }, 0);
-      tl.to(borders, { scaleY: 1, duration: 0.5, stagger: 0.15, ease: "power2.out" }, 0);
-
-      // 2. Code panel clips in — starts 0.2s after step sequence
-      if (panel) {
-        tl.to(panel, { clipPath: "inset(0 0 0% 0)", duration: 0.6, ease: "power3.out" }, 0.2);
-      }
-
-      // 3. Response chars type in after clip
-      if (responseEl) {
-        tl.to(responseEl.querySelectorAll("span"), { opacity: 1, duration: 0, stagger: 0.008 }, ">");
-      }
-
-      // 4. Badge — white flash → green
-      if (badge) {
-        tl.to(badge, { opacity: 1, duration: 0.15, ease: "none" }, ">");
-        tl.to(badge, { color: "var(--color-go)", duration: 0.15 }, ">");
-      }
-
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: "top 65%",
-        once: true,
-        onEnter: () => tl.play(),
-      });
-    });
-  }, { scope: sectionRef });
-
   return (
-    <section
-      ref={sectionRef}
-      id="quickstart"
-      className="py-16 md:py-24 w-full"
-    >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="flex flex-col md:flex-row gap-12 md:gap-16">
+    <section id="quickstart" className="scroll-mt-14 bg-bg pt-20 lg:pt-28">
+      <div className="wall mx-auto max-w-[1400px] lg:grid-cols-12">
+        <div className="pane flex flex-col justify-end p-6 sm:p-10 lg:col-span-5 lg:min-h-[17rem]">
+          <h2 className="font-display text-4xl font-extrabold leading-tight sm:text-5xl">One request is the whole integration.</h2>
+          <p className="mt-4 max-w-sm text-lg text-muted">No SDK to install. Anything that sends an HTTP request works.</p>
+        </div>
 
-          {/* Left column */}
-          <div className="md:w-[45%] shrink-0">
-            <h2 className="text-2xl font-semibold text-ink mb-8 tracking-tight">
-              Up in 30 seconds.
-            </h2>
-
-            <div className="space-y-6">
-              {STEPS.map((step, i) => (
-                <div
-                  key={i}
-                  ref={(el) => { stepRefs.current[i] = el; }}
-                  className="flex gap-4 items-stretch"
+        <div className="pane flex flex-col lg:col-span-7 lg:col-start-6 lg:row-span-4 lg:row-start-1">
+          <div className="flex items-center border-b border-border pr-2">
+            <div role="tablist" aria-label="Language" className="flex flex-1 overflow-x-auto no-scrollbar">
+              {TABS.map((t) => (
+                <button
+                  key={t.key}
+                  role="tab"
+                  aria-selected={tab === t.key}
+                  onClick={() => setTab(t.key)}
+                  className={`shrink-0 border-b-2 px-5 py-4 text-sm font-semibold transition-colors ${tab === t.key ? "border-ink text-ink" : "border-transparent text-muted hover:text-ink"}`}
                 >
-                  <div
-                    ref={(el) => { borderRefs.current[i] = el; }}
-                    className="w-0.5 shrink-0 bg-border"
-                  />
-                  <div className="pb-1">
-                    <p className="text-sm font-medium text-ink mb-1">{step.title}</p>
-                    <p className="text-xs font-mono leading-relaxed text-muted">
-                      {step.body}
-                    </p>
-                  </div>
-                </div>
+                  {t.label}
+                </button>
               ))}
             </div>
-
-            <p className="mt-8 text-xs font-mono text-faint">
-              No SDK required. Works with fetch, axios, curl, httpx.
-            </p>
+            <button onClick={copy} className="inline-flex h-9 items-center gap-1.5 px-3 text-sm font-semibold text-muted hover:text-ink" aria-label="Copy code">
+              {copied ? <Check size={14} /> : <Clipboard size={14} />}
+              {copied ? "Copied" : "Copy"}
+            </button>
           </div>
-
-          {/* Right column — code panel */}
-          <div ref={codePanelRef} className="flex-1 min-w-0 bg-surface">
-
-            {/* Language tabs */}
-            <Tabs value={TABS[activeTab].key} className="relative w-full">
-              <TabsList className="flex w-full justify-start overflow-x-auto no-scrollbar border-b border-border bg-transparent rounded-none h-auto p-0">
-                {TABS.map((tab, i) => (
-                  <TabsTrigger
-                    key={tab.key}
-                    value={tab.key}
-                    ref={(el) => { tabRefs.current[i] = el; }}
-                    onClick={() => switchTab(i)}
-                    className={`px-4 py-3 text-xs font-mono whitespace-nowrap shrink-0 rounded-none border-none shadow-none bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none ${
-                      i === activeTab ? "text-ink" : "text-faint hover:text-muted"
-                    }`}
-                  >
-                    {tab.label}
-                  </TabsTrigger>
-                ))}
-
-                {/* Sliding underline */}
-                <div
-                  className="absolute bottom-0 h-px pointer-events-none bg-ink"
-                  style={{
-                    height: "2px",
-                    left: underline.left,
-                    width: underline.width,
-                    transition: "left 0.2s ease, width 0.2s ease",
-                  }}
-                />
-
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  onClick={handleCopy}
-                  className={`ml-auto mr-3 my-auto shrink-0 hover:bg-transparent ${
-                    copied ? "text-go" : "text-faint hover:text-ink"
-                  }`}
-                  title="Copy"
-                >
-                  {copied ? <Check size={12} /> : <Clipboard size={12} />}
-                </Button>
-              </TabsList>
-            </Tabs>
-
-            {/* Code area */}
-            <div
-              className="px-5 py-5 overflow-auto"
-              style={{ opacity: fading ? 0 : 1, transition: "opacity 80ms ease" }}
-            >
-              <pre className="text-xs font-mono leading-relaxed whitespace-pre-wrap">
-                {highlight(SNIPPETS[TABS[activeTab].key], TABS[activeTab].key)}
-              </pre>
-            </div>
-
-            {/* Response divider */}
-            <div className="mx-5 flex items-center gap-3 py-2 border-t border-border">
-              <span className="text-[11px] font-mono text-faint">
-                response
-              </span>
-              <div className="flex-1 h-px bg-border" />
-              <Badge ref={badgeRef} variant="outline" className="text-[11px] font-mono text-go border-transparent p-0">
-                200 OK <Check size={12} className="inline-block mb-0.5" />
-              </Badge>
-            </div>
-
-            {/* Response JSON — chars for typing animation */}
-            <div className="px-5 pb-5 pt-1">
-              <pre
-                ref={responseRef}
-                className="text-xs font-mono leading-relaxed whitespace-pre-wrap text-muted"
-              >
-                {RESPONSE_JSON.split("").map((ch, i) => (
-                  <span key={i}>{ch}</span>
-                ))}
-              </pre>
-            </div>
+          <pre className="overflow-x-auto p-6 text-[0.9rem] leading-relaxed no-scrollbar">{highlight(SNIPPETS[tab], tab)}</pre>
+          <div className="mt-auto flex items-center gap-3 border-t border-border bg-raised px-6 py-3">
+            <span className="text-sm font-semibold">Response</span>
+            <span className="inline-flex h-6 items-center bg-[var(--go)] px-2 text-xs font-bold text-[var(--bg)]">200 OK</span>
           </div>
+          <pre className="min-h-40 flex-none overflow-x-auto bg-raised px-6 pb-6 pt-1 text-[0.9rem] leading-relaxed text-muted no-scrollbar">{RESPONSE}</pre>
         </div>
+
+        {STEPS.map((s) => (
+          <div key={s.title} className="pane p-6 sm:px-10 lg:col-span-5">
+            <h3 className="font-display text-xl font-bold">{s.title}</h3>
+            <p className="mt-1.5 max-w-sm text-muted">{s.body}</p>
+          </div>
+        ))}
       </div>
     </section>
   );

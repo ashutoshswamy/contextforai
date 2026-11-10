@@ -1,12 +1,13 @@
 import { ArrowLeft } from "lucide-react";
+import { pageMeta } from "@/lib/seo";
 import Footer from "@/app/components/Footer";
 import { Button } from "@/components/ui/button";
 
-export const metadata = {
-  title: "Terms of Service · contextforai",
-  description: "The terms governing use of the contextforai API and dashboard.",
-  alternates: { canonical: "/terms" },
-};
+export const metadata = pageMeta({
+  title: "Terms of Service | contextforai",
+  description: "The terms governing use of the contextforai API and dashboard: acceptable use, credits and billing, liability and eligibility.",
+  path: "/terms",
+});
 
 const EFFECTIVE = "July 1, 2026";
 
@@ -31,8 +32,7 @@ export default function TermsPage() {
       <main className="flex-1">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-16">
           <div className="mb-10">
-            <p className="text-xs font-mono text-faint uppercase tracking-widest mb-2">Legal</p>
-            <h1 className="text-3xl font-semibold text-ink mb-3">Terms of Service</h1>
+            <h1 className="font-display text-4xl sm:text-5xl font-extrabold text-ink mb-3">Terms of Service</h1>
             <p className="text-sm text-muted">Effective {EFFECTIVE}</p>
           </div>
 
@@ -43,6 +43,9 @@ export default function TermsPage() {
                 by these Terms. If you are using the Service on behalf of an organization, you
                 represent that you have authority to bind that organization. If you do not agree,
                 do not use the Service.
+              </p>
+              <p>
+                You must be at least 18 years old to create an account or use the Service.
               </p>
             </Section>
 

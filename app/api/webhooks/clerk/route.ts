@@ -1,12 +1,14 @@
 import { Webhook } from "svix";
 import { NextRequest } from "next/server";
 import sql from "@/lib/db";
+import { saveLegalConsent } from "@/lib/legal";
 
 interface ClerkEvent {
   type: string;
   data: {
     id: string;
     email_addresses: Array<{ email_address: string }>;
+    unsafe_metadata?: { legal?: { over18?: boolean; tosAcceptedAt?: string; version?: string } };
   };
 }
 
@@ -54,6 +56,16 @@ export async function POST(request: NextRequest) {
     VALUES (${userId})
     ON CONFLICT (user_id) DO NOTHING
   `;
+
+  // Consent captured at sign-up. Never fail provisioning over it; /api/user/consent backfills.
+  const legal = evt.data.unsafe_metadata?.legal;
+  if (legal?.over18 === true) {
+    try {
+      await saveLegalConsent(clerkId, legal.tosAcceptedAt, legal.version);
+    } catch (e) {
+      console.error("legal consent save failed", e);
+    }
+  }
 
   return new Response("OK");
 }

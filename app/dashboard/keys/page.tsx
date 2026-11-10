@@ -5,7 +5,7 @@ import { Key, CheckCircle, Circle } from "lucide-react";
 import sql from "@/lib/db";
 import CreateKeyModal from "@/app/components/dashboard/CreateKeyModal";
 
-export const metadata: Metadata = { title: "API Keys — contextforai" };
+export const metadata: Metadata = { title: "API Keys - contextforai" };
 import RevokeKeyButton from "@/app/components/dashboard/RevokeKeyButton";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -34,7 +34,7 @@ export default async function KeysPage() {
     <div className="p-4 md:p-8 w-full">
       <div className="mb-8 flex items-start justify-between">
         <div>
-          <p className="text-xs font-mono text-faint uppercase tracking-widest mb-1">API Keys</p>
+          <p className="text-xs font-mono text-faint mb-1">API Keys</p>
           <h1 className="text-2xl font-semibold text-ink">Your API keys</h1>
           <p className="text-sm text-muted mt-1">
             Keys grant access to all endpoints. Each key is shown only once.
@@ -117,7 +117,7 @@ export default async function KeysPage() {
 
 function Th({ children }: { children?: React.ReactNode }) {
   return (
-    <TableHead className="px-5 py-2.5 text-left text-xs font-mono text-faint uppercase tracking-wide bg-raised h-auto">
+    <TableHead className="px-5 py-2.5 text-left text-xs font-mono text-faint bg-raised h-auto">
       {children}
     </TableHead>
   );

@@ -1,121 +1,74 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
+import { useIsLoggedIn } from "./useIsLoggedIn";
+import { ThemeToggle } from "@/components/theme-toggle";
 
-export default function Navbar({ isLoggedIn }: { isLoggedIn: boolean }) {
-  const navRef = useRef<HTMLElement>(null);
-  const [mobileOpen, setMobileOpen] = useState(false);
+const LINKS = [
+  { href: "/#endpoints", label: "Endpoints" },
+  { href: "/#quickstart", label: "Quickstart" },
+  { href: "/#pricing", label: "Pricing" },
+  { href: "/docs", label: "Docs" },
+];
 
-  useEffect(() => {
-    const nav = navRef.current;
-    if (!nav) return;
-    function onScroll() {
-      if (window.scrollY > 80) nav!.classList.add("nav-scrolled");
-      else nav!.classList.remove("nav-scrolled");
-      if (window.scrollY > 50) setMobileOpen(false);
-    }
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+export function Wordmark({ className = "" }: { className?: string }) {
+  return (
+    <a href="/" className={`text-base font-semibold transition-opacity hover:opacity-80 ${className}`}>
+      contextforai
+    </a>
+  );
+}
+
+export default function Navbar() {
+  const isLoggedIn = useIsLoggedIn();
+  const [open, setOpen] = useState(false);
+  const cta = isLoggedIn ? { href: "/dashboard", label: "Dashboard", short: "Dashboard" } : { href: "/sign-up", label: "Get started free", short: "Get started" };
 
   return (
-    <nav
-      ref={navRef}
-      className="fixed top-0 left-0 right-0 z-50"
-      style={{ transition: "background 150ms ease, border-color 150ms ease" }}
-    >
-      <div className="max-w-[1100px] mx-auto px-6 h-14 flex items-center justify-between">
-        <a
-          href="/"
-          className="font-mono text-sm font-semibold text-white hover:text-white/80 transition-colors"
-        >
-          contextforai
-        </a>
+    <header className="sticky top-0 z-40 bg-bar text-[#f0f3f5]">
+      <div className="mx-auto flex h-14 max-w-[1400px] items-center justify-between px-2">
+        <Wordmark />
 
-        {/* Desktop nav links */}
-        <div className="hidden sm:flex items-center gap-6">
-          <a href="/docs" className="text-sm text-muted hover:text-ink transition-colors">Docs</a>
-          <a href="#endpoints" className="text-sm text-muted hover:text-ink transition-colors">Endpoints</a>
-          <a href="#quickstart" className="text-sm text-muted hover:text-ink transition-colors">Quickstart</a>
-          <a href="#pricing" className="text-sm text-muted hover:text-ink transition-colors">Pricing</a>
-        </div>
-
-        <div className="flex items-center gap-3">
-          {/* Desktop CTAs */}
-          <div className="hidden sm:flex items-center gap-3">
-            {isLoggedIn ? (
-              <>
-                <a href="/dashboard/playground" className="text-sm text-muted hover:text-ink transition-colors">
-                  Playground
-                </a>
-                <Button asChild size="sm" className="gap-1.5 text-black hover:opacity-80 hover:bg-[#F0F0F0]" style={{ backgroundColor: "#F0F0F0" }}>
-                  <a href="/dashboard">
-                    Dashboard <ArrowRight size={13} />
-                  </a>
-                </Button>
-              </>
-            ) : (
-              <>
-                <a href="/sign-in" className="text-sm text-muted hover:text-ink transition-colors">
-                  Sign in
-                </a>
-                <Button asChild size="sm" className="gap-1.5 text-black hover:opacity-80 hover:bg-[#F0F0F0]" style={{ backgroundColor: "#F0F0F0" }}>
-                  <a href="/sign-up">
-                    Get started <ArrowRight size={13} />
-                  </a>
-                </Button>
-              </>
-            )}
-          </div>
-
-          {/* Mobile CTA (condensed) */}
-          <Button asChild size="sm" className="sm:hidden gap-1 text-xs text-black hover:bg-[#F0F0F0]" style={{ backgroundColor: "#F0F0F0" }}>
-            <a href={isLoggedIn ? "/dashboard" : "/sign-up"}>
-              {isLoggedIn ? "Dashboard" : "Get started"}
+        <nav aria-label="Primary" className="hidden items-center gap-8 md:flex">
+          {LINKS.map((l) => (
+            <a key={l.href} href={l.href} className="text-sm font-medium text-[#f0f3f5]/70 transition-colors hover:text-white">
+              {l.label}
             </a>
-          </Button>
+          ))}
+        </nav>
 
-          {/* Mobile hamburger */}
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            onClick={() => setMobileOpen((v) => !v)}
-            className="sm:hidden text-muted hover:text-ink"
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
-          </Button>
-        </div>
-      </div>
-
-      {/* Mobile dropdown */}
-      {mobileOpen && (
-        <div className="sm:hidden border-t border-white/10 bg-bg/95 backdrop-blur-sm px-6 py-4 space-y-0.5">
-          <a href="#endpoints" onClick={() => setMobileOpen(false)} className="block py-2.5 text-sm text-muted hover:text-ink transition-colors">
-            Endpoints
-          </a>
-          <a href="#quickstart" onClick={() => setMobileOpen(false)} className="block py-2.5 text-sm text-muted hover:text-ink transition-colors">
-            Quickstart
-          </a>
-          <a href="#pricing" onClick={() => setMobileOpen(false)} className="block py-2.5 text-sm text-muted hover:text-ink transition-colors">
-            Pricing
-          </a>
-          <a href="/docs" onClick={() => setMobileOpen(false)} className="block py-2.5 text-sm text-muted hover:text-ink transition-colors">
-            Docs
-          </a>
-          {isLoggedIn ? (
-            <a href="/dashboard/playground" onClick={() => setMobileOpen(false)} className="block py-2.5 text-sm text-muted hover:text-ink transition-colors">
-              Playground
-            </a>
-          ) : (
-            <a href="/sign-in" onClick={() => setMobileOpen(false)} className="block py-2.5 text-sm text-muted hover:text-ink transition-colors">
+        <div className="flex items-center gap-1 sm:gap-2">
+          <ThemeToggle />
+          {!isLoggedIn && (
+            <a href="/sign-in" className="hidden px-3 text-sm font-medium text-[#f0f3f5]/70 transition-colors hover:text-white sm:inline">
               Sign in
             </a>
           )}
+          <a href={cta.href} data-magnetic className="inline-flex h-9 shrink-0 items-center whitespace-nowrap bg-ember px-3 text-sm sm:px-4 font-semibold text-[var(--accent-ink)] transition-colors hover:bg-ember-hi">
+            <span className="sm:hidden">{cta.short}</span>
+            <span className="hidden sm:inline">{cta.label}</span>
+          </a>
+          <button
+            className="inline-flex size-11 items-center justify-center md:hidden"
+            aria-label={open ? "Close menu" : "Open menu"}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+          >
+            {open ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
+      </div>
+
+      {open && (
+        <nav aria-label="Mobile" className="border-t border-white/10 px-4 py-3 md:hidden">
+          {[...LINKS, ...(isLoggedIn ? [{ href: "/dashboard/playground", label: "Playground" }] : [{ href: "/sign-in", label: "Sign in" }])].map((l) => (
+            <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="block py-3 text-base font-medium">
+              {l.label}
+            </a>
+          ))}
+        </nav>
       )}
-    </nav>
+    </header>
   );
 }

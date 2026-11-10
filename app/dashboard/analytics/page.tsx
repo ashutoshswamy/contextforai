@@ -5,7 +5,7 @@ import { Zap, CheckCircle2, AlertTriangle, TrendingUp, Clock, ArrowUpRight } fro
 import sql from "@/lib/db";
 import { Card, CardContent } from "@/components/ui/card";
 
-export const metadata: Metadata = { title: "Analytics — contextforai" };
+export const metadata: Metadata = { title: "Analytics - contextforai" };
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -42,10 +42,10 @@ function Heatmap({ data }: { data: Record<string, number> }) {
     if (p < 0.25) return "bg-ember/20 border border-ember/20";
     if (p < 0.5)  return "bg-ember/45 border border-ember/30";
     if (p < 0.75) return "bg-ember/70 border border-ember/40";
-    return "bg-ember border border-ember/60";
+    return "bg-primary border border-ember/60";
   }
 
-  // Month labels — find first day of each new month among our 12 weeks
+  // Month labels - find first day of each new month among our 12 weeks
   const weeks = Array.from({ length: 12 }, (_, w) => days.slice(w * 7, w * 7 + 7));
   const monthLabels = weeks.map((week) => {
     const firstOfMonth = week.find((d) => new Date(d.date).getDate() <= 7);
@@ -87,7 +87,7 @@ function Heatmap({ data }: { data: Record<string, number> }) {
       {/* Legend */}
       <div className="flex items-center gap-1.5 mt-3">
         <span className="text-[10px] font-mono text-faint">less</span>
-        {["bg-raised border-border/60","bg-ember/20","bg-ember/45","bg-ember/70","bg-ember"].map((c, i) => (
+        {["bg-raised border-border/60","bg-ember/20","bg-ember/45","bg-ember/70","bg-primary"].map((c, i) => (
           <span key={i} className={`w-3 h-3 rounded-sm inline-block border border-transparent ${c}`} />
         ))}
         <span className="text-[10px] font-mono text-faint">more</span>
@@ -115,7 +115,7 @@ function SparkBars({ data }: { data: Record<string, number> }) {
       {days.map((d) => (
         <div key={d.key} className="flex-1 h-full flex flex-col items-center justify-end gap-1 group relative" title={`${d.label}: ${d.count}`}>
           <div
-            className="w-full rounded-sm bg-ember/70 group-hover:bg-ember transition-colors"
+            className="w-full rounded-sm bg-ember/70 group-hover:bg-primary transition-colors"
             style={{ height: `${Math.max((d.count / max) * 100, d.count > 0 ? 8 : 2)}%` }}
           />
           {d.count > 0 && (
@@ -199,7 +199,7 @@ function StatCard({ label, value, sub, icon, accent = false }: {
     <Card className={`p-4 gap-3 ${accent ? "bg-ember/5 border-ember/20" : "border-border"}`}>
       <CardContent className="p-0 flex flex-col gap-3">
         <div className="flex items-center justify-between">
-          <p className="text-xs font-mono text-faint uppercase tracking-widest">{label}</p>
+          <p className="text-xs font-mono text-faint ">{label}</p>
           <span className={`${accent ? "text-ember" : "text-faint"}`}>{icon}</span>
         </div>
         <div>
@@ -213,7 +213,7 @@ function StatCard({ label, value, sub, icon, accent = false }: {
 
 function Th({ children }: { children?: React.ReactNode }) {
   return (
-    <TableHead className="px-4 py-2.5 text-left text-xs font-mono text-faint uppercase tracking-wide bg-raised whitespace-nowrap h-auto">
+    <TableHead className="px-4 py-2.5 text-left text-xs font-mono text-faint bg-raised whitespace-nowrap h-auto">
       {children}
     </TableHead>
   );
@@ -314,7 +314,7 @@ export default async function AnalyticsPage() {
       {/* Header */}
       <div className="flex items-start justify-between mb-8">
         <div>
-          <p className="text-xs font-mono text-faint uppercase tracking-widest mb-1">Analytics</p>
+          <p className="text-xs font-mono text-faint mb-1">Analytics</p>
           <h1 className="text-2xl font-semibold text-ink">Usage overview</h1>
           <p className="text-sm text-muted mt-0.5">Last 30 days</p>
         </div>
@@ -410,7 +410,7 @@ export default async function AnalyticsPage() {
                     requests={k.requests as number}
                     credits={k.credits as number}
                     pct={Math.round(((k.requests as number) / maxKey) * 100)}
-                    color="bg-ember"
+                    color="bg-primary"
                   />
                 ))}
               </div>
@@ -482,7 +482,7 @@ export default async function AnalyticsPage() {
                       </TableCell>
                       <TableCell className="px-4 py-3 max-w-[200px]">
                         <span className="font-mono text-xs text-faint truncate block" title={(r.target_url as string) ?? ""}>
-                          {(r.target_url as string) ?? "—"}
+                          {(r.target_url as string) ?? "-"}
                         </span>
                       </TableCell>
                       <TableCell className="px-4 py-3">
@@ -497,10 +497,10 @@ export default async function AnalyticsPage() {
                       </TableCell>
                       <TableCell className="px-4 py-3 font-mono text-xs text-faint tabular-nums">{r.credits_used as number}</TableCell>
                       <TableCell className="px-4 py-3 font-mono text-xs text-faint tabular-nums">
-                        {r.latency_ms ? `${r.latency_ms as number}ms` : "—"}
+                        {r.latency_ms ? `${r.latency_ms as number}ms` : "-"}
                       </TableCell>
                       <TableCell className="px-4 py-3 font-mono text-xs text-faint">
-                        {r.key_prefix ? `${r.key_name as string} · ${r.key_prefix as string}••` : "—"}
+                        {r.key_prefix ? `${r.key_name as string} · ${r.key_prefix as string}••` : "-"}
                       </TableCell>
                       <TableCell className="px-4 py-3 text-xs text-faint whitespace-nowrap">
                         {new Date(r.created_at as string).toLocaleString()}

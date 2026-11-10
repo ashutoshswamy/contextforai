@@ -1,13 +1,12 @@
-import { auth } from "@clerk/nextjs/server";
 import DocsContent from "./DocsContent";
+import { pageMeta } from "@/lib/seo";
 
-export const metadata = {
-  title: "API Reference — contextforai",
-  description: "Full API reference for contextforai. Authentication, endpoints, request/response schemas, error codes.",
-  alternates: { canonical: "/docs" },
-};
+export const metadata = pageMeta({
+  title: "API Reference | contextforai",
+  description: "contextforai API reference: authentication, the seven extraction endpoints, request and response schemas, credits, rate limits and error codes.",
+  path: "/docs",
+});
 
-export default async function DocsPage() {
-  const { userId } = await auth();
-  return <DocsContent isLoggedIn={!!userId} />;
+export default function DocsPage() {
+  return <DocsContent />;
 }

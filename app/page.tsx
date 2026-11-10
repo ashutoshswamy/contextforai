@@ -1,92 +1,56 @@
 import type { Metadata } from "next";
-import { auth } from "@clerk/nextjs/server";
 import HeroText from "./components/HeroText";
-import HowItWorks from "./components/HowItWorks";
 import Footer from "./components/Footer";
 import EndpointsSection from "./components/EndpointsSection";
 import QuickstartSection from "./components/QuickstartSection";
 import PricingSection from "./components/PricingSection";
 import CTASection from "./components/CTASection";
 import Navbar from "./components/Navbar";
-import StackedSectionsWrapper from "./components/StackedSectionsWrapper";
+import { pageMeta } from "@/lib/seo";
+import LandingMotion from "./components/landing/LandingMotion";
 
-export const metadata: Metadata = {
-  alternates: { canonical: "/" },
-};
+export const metadata: Metadata = pageMeta({
+  title: "contextforai | URL to Markdown, JSON & Screenshot API",
+  description: "Extract clean Markdown, JSON, sitemaps, screenshots, fonts and brand assets from any URL with one API. 500 free credits, no card required.",
+  path: "/",
+});
 
+const SITE = "https://contextforai.ashutoshswamy.in";
 const JSON_LD = {
   "@context": "https://schema.org",
-  "@type": "WebAPI",
-  name: "contextforai",
-  description:
-    "One API to extract Markdown, JSON, sitemaps, screenshots, and brand assets from any URL.",
-  url: "https://contextforai.ashutoshswamy.in",
-  documentation: "https://contextforai.ashutoshswamy.in/docs",
-  offers: {
-    "@type": "Offer",
-    price: "0",
-    priceCurrency: "INR",
-    description: "Free tier with 500 credits/month",
-  },
+  "@graph": [
+    { "@type": "Organization", "@id": `${SITE}/#org`, name: "contextforai", url: SITE, logo: `${SITE}/android-chrome-512x512.png` },
+    { "@type": "WebSite", "@id": `${SITE}/#website`, name: "contextforai", url: SITE, publisher: { "@id": `${SITE}/#org` } },
+    {
+      "@type": "WebAPI",
+      name: "contextforai",
+      description: "One API to extract Markdown, JSON, sitemaps, screenshots, fonts and brand assets from any URL.",
+      url: SITE,
+      documentation: `${SITE}/docs`,
+      provider: { "@id": `${SITE}/#org` },
+      offers: { "@type": "Offer", price: "0", priceCurrency: "INR", description: "Free tier with 500 credits/month" },
+    },
+  ],
 };
 
-export default async function Home() {
-  const { userId } = await auth();
-
+export default function Home() {
   return (
-    <div className="min-h-screen bg-bg text-ink overflow-x-hidden">
+    <div className="min-h-screen bg-bg text-ink">
       <script
         type="application/ld+json"
-        // eslint-disable-next-line react/no-danger
         dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
       />
-      <Navbar isLoggedIn={!!userId} />
-
-      <StackedSectionsWrapper>
-        {/* Hero */}
-        <div className="stacked-panel relative z-[1] bg-bg min-h-screen flex flex-col justify-center shadow-[0_-15px_40px_rgba(0,0,0,0.4)]">
-          <section className="relative overflow-hidden w-full h-full flex flex-col justify-center">
-            {/* Subtle grid background */}
-            <div
-              className="absolute inset-0 hero-grid pointer-events-none"
-              id="hero-bg"
-              style={{ opacity: 0.8 }}
-            />
-            <div className="relative max-w-6xl w-full mx-auto px-4 sm:px-6 py-12 md:py-24">
-              <HeroText isLoggedIn={!!userId} />
-            </div>
-          </section>
-        </div>
-
-        {/* Endpoints */}
-        <div className="stacked-panel relative z-[2] bg-bg min-h-screen flex flex-col justify-center shadow-[0_-15px_40px_rgba(0,0,0,0.4)]">
-          <EndpointsSection />
-        </div>
-
-        {/* How It Works */}
-        <div className="stacked-panel relative z-[3] bg-bg min-h-screen flex flex-col justify-center shadow-[0_-15px_40px_rgba(0,0,0,0.4)]">
-          <HowItWorks />
-        </div>
-
-        {/* Quickstart */}
-        <div className="stacked-panel relative z-[4] bg-bg min-h-screen flex flex-col justify-center shadow-[0_-15px_40px_rgba(0,0,0,0.4)]">
-          <QuickstartSection />
-        </div>
-
-        {/* Pricing */}
-        <div className="stacked-panel relative z-[5] bg-bg min-h-screen flex flex-col justify-center shadow-[0_-15px_40px_rgba(0,0,0,0.4)]">
-          <PricingSection isLoggedIn={!!userId} />
-        </div>
-
-        {/* CTA */}
-        <div className="stacked-panel relative z-[6] bg-bg min-h-screen flex flex-col justify-center shadow-[0_-15px_40px_rgba(0,0,0,0.4)]">
-          <CTASection isLoggedIn={!!userId} />
-        </div>
-      </StackedSectionsWrapper>
-
-      <div className="relative z-[7] bg-bg shadow-[0_-20px_40px_rgba(0,0,0,0.8)]">
-        <Footer />
-      </div>
+      <LandingMotion>
+      <Navbar />
+      <main>
+        <HeroText />
+        <EndpointsSection />
+        <QuickstartSection />
+        <PricingSection />
+        <CTASection />
+      </main>
+      <Footer />
+      </LandingMotion>
     </div>
   );
 }

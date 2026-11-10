@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
     VALUES (${userId}, ${hash}, ${prefix}, ${name})
   `;
 
-  // Return full key ONCE — never stored in plaintext
+  // Return full key ONCE - never stored in plaintext
   return Response.json({ key, prefix, name });
 }
 

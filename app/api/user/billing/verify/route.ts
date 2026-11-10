@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: "Invalid payment signature" }, { status: 400 });
   }
 
-  // Fulfil order (idempotent — webhook may also fire)
+  // Fulfil order (idempotent - webhook may also fire)
   const [order] = await sql`
     SELECT * FROM orders WHERE id = ${razorpay_order_id} AND status = 'pending'
   `;

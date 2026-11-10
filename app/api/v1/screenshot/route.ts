@@ -50,8 +50,8 @@ export async function POST(request: NextRequest) {
 
         // Playwright follows redirects (and loads subresources) inside the
         // browser itself, completely bypassing safeFetch's SSRF checks. This
-        // intercepts every request the page makes — main navigation, any
-        // redirect hop, every subresource — and blocks anything resolving to
+        // intercepts every request the page makes - main navigation, any
+        // redirect hop, every subresource - and blocks anything resolving to
         // a private/internal address before it leaves the process.
         await page.route("**/*", async (route) => {
           try {

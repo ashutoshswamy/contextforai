@@ -1,12 +1,13 @@
 import { ArrowLeft } from "lucide-react";
+import { pageMeta } from "@/lib/seo";
 import Footer from "@/app/components/Footer";
 import { Button } from "@/components/ui/button";
 
-export const metadata = {
-  title: "Privacy Policy · contextforai",
-  description: "How contextforai collects, uses, and protects your data.",
-  alternates: { canonical: "/privacy" },
-};
+export const metadata = pageMeta({
+  title: "Privacy Policy | contextforai",
+  description: "How contextforai collects, uses, retains and protects your data, including usage logs, cookies and third-party processors.",
+  path: "/privacy",
+});
 
 const EFFECTIVE = "July 1, 2026";
 
@@ -31,8 +32,7 @@ export default function PrivacyPage() {
       <main className="flex-1">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 py-16">
           <div className="mb-10">
-            <p className="text-xs font-mono text-faint uppercase tracking-widest mb-2">Legal</p>
-            <h1 className="text-3xl font-semibold text-ink mb-3">Privacy Policy</h1>
+            <h1 className="font-display text-4xl sm:text-5xl font-extrabold text-ink mb-3">Privacy Policy</h1>
             <p className="text-sm text-muted">Effective {EFFECTIVE}</p>
           </div>
 
@@ -54,7 +54,7 @@ export default function PrivacyPage() {
               <p>
                 When you sign up, we collect your email address and name via Clerk (our
                 authentication provider). Clerk may also collect data it requires to operate
-                authentication on our behalf — see{" "}
+                authentication on our behalf - see{" "}
                 <a href="https://clerk.com/legal/privacy" target="_blank" rel="noopener noreferrer">
                   Clerk's Privacy Policy
                 </a>
@@ -71,7 +71,7 @@ export default function PrivacyPage() {
               <p>
                 Payments are handled by Razorpay. We store the product ID, credit amount, order
                 amount, and payment status. We do <strong>not</strong> store card numbers or bank
-                details — these remain with Razorpay.
+                details - these remain with Razorpay.
               </p>
               <h3>Technical data</h3>
               <p>
@@ -102,14 +102,14 @@ export default function PrivacyPage() {
               </p>
               <ul>
                 <li>
-                  <strong>Clerk</strong> — user authentication and session management
+                  <strong>Clerk</strong> - user authentication and session management
                 </li>
                 <li>
-                  <strong>Neon</strong> — PostgreSQL database hosting (AWS infrastructure,
+                  <strong>Neon</strong> - PostgreSQL database hosting (AWS infrastructure,
                   ap-southeast-1 region)
                 </li>
                 <li>
-                  <strong>Razorpay</strong> — payment processing
+                  <strong>Razorpay</strong> - payment processing
                 </li>
               </ul>
               <p>
@@ -146,7 +146,7 @@ export default function PrivacyPage() {
             <Section title="8. Security">
               <p>
                 All data in transit is encrypted via TLS. API keys are stored as hashed prefixes
-                — we cannot recover a key once issued. Access to production databases is
+                - we cannot recover a key once issued. Access to production databases is
                 restricted to authorized personnel. We follow security best practices but cannot
                 guarantee absolute security.
               </p>

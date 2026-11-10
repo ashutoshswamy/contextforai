@@ -1,19 +1,21 @@
 import type { MetadataRoute } from "next";
+import { ENDPOINTS } from "./docs/endpoints";
 
 const BASE_URL = "https://contextforai.ashutoshswamy.in";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const routes = [
-    { path: "", priority: 1 },
-    { path: "/docs", priority: 0.8 },
-    { path: "/privacy", priority: 0.3 },
-    { path: "/terms", priority: 0.3 },
-  ];
+// Update lastModified when a page's content actually changes.
+const routes = [
+  { path: "", priority: 1, lastModified: "2026-11-10" },
+  { path: "/docs", priority: 0.8, lastModified: "2026-11-10" },
+  ...ENDPOINTS.map((e) => ({ path: `/docs/${e.id}`, priority: 0.7, lastModified: "2026-11-10" })),
+  { path: "/privacy", priority: 0.3, lastModified: "2026-07-01" },
+  { path: "/terms", priority: 0.3, lastModified: "2026-11-10" },
+];
 
-  return routes.map(({ path, priority }) => ({
+export default function sitemap(): MetadataRoute.Sitemap {
+  return routes.map(({ path, priority, lastModified }) => ({
     url: `${BASE_URL}${path}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly" as const,
+    lastModified: new Date(lastModified),
     priority,
   }));
 }

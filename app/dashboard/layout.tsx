@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import sql from "@/lib/db";
 import Sidebar from "@/app/components/dashboard/Sidebar";
 import AutoRefresh from "@/app/components/dashboard/AutoRefresh";
+import ConsentSync from "@/app/components/dashboard/ConsentSync";
 
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
@@ -32,6 +33,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   return (
     <div className="flex min-h-screen bg-bg">
       <AutoRefresh />
+      <ConsentSync />
       <Sidebar credits={credits} totalCredits={totalCredits} />
       <main className="flex-1 overflow-y-auto pt-14 md:pt-0">{children}</main>
     </div>

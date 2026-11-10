@@ -1,6 +1,6 @@
 # contextforai
 
-![contextforai](public/og-image.png)
+![contextforai](public/og-image.jpg)
 
 One API to extract structured data from any URL — clean Markdown, raw HTML, structured JSON, sitemaps, screenshots, and brand assets. Single API key, credit-based billing, per-plan rate limits.
 

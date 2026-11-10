@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 declare global {
@@ -59,8 +60,8 @@ export default function BillingCheckout({
         currency,
         order_id: orderId,
         name: "contextforai",
-        description: `${label} — ${credits.toLocaleString()} credits`,
-        theme: { color: "#FF4F00" },
+        description: `${label} - ${credits.toLocaleString()} credits`,
+        theme: { color: "var(--accent)" },
         handler: async (response: {
           razorpay_order_id: string;
           razorpay_payment_id: string;
@@ -94,9 +95,9 @@ export default function BillingCheckout({
         variant="ghost"
         onClick={handleBuy}
         disabled={loading}
-        className={`${className} h-auto disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
+        className={className}
       >
-        {loading ? "Opening…" : `Buy ${priceDisplay}`}
+        {loading ? "Opening…" : (<>{`Buy ${priceDisplay}`}<ArrowRight size={16} aria-hidden /></>)}
       </Button>
       {error && <p className="text-xs text-stop mt-1">{error}</p>}
     </div>

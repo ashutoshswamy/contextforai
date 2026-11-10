@@ -5,7 +5,7 @@ import sql from "@/lib/db";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-export const metadata: Metadata = { title: "Usage History — contextforai" };
+export const metadata: Metadata = { title: "Usage History - contextforai" };
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 async function getUserId(clerkId: string): Promise<number | null> {
@@ -24,7 +24,7 @@ function StatusBadge({ code }: { code: number }) {
 
 function Th({ children }: { children?: React.ReactNode }) {
   return (
-    <TableHead className="px-4 py-2.5 text-left text-xs font-mono text-faint uppercase tracking-wide bg-raised whitespace-nowrap h-auto">
+    <TableHead className="px-4 py-2.5 text-left text-xs font-mono text-faint bg-raised whitespace-nowrap h-auto">
       {children}
     </TableHead>
   );
@@ -93,7 +93,7 @@ export default async function UsagePage() {
   return (
     <div className="p-4 md:p-8 w-full">
       <div className="mb-8">
-        <p className="text-xs font-mono text-faint uppercase tracking-widest mb-1">Usage History</p>
+        <p className="text-xs font-mono text-faint mb-1">Usage History</p>
         <h1 className="text-2xl font-semibold text-ink">All requests</h1>
         <p className="text-sm text-muted mt-0.5">Showing last {logs.length} of {total.toLocaleString()} total</p>
       </div>
@@ -109,7 +109,7 @@ export default async function UsagePage() {
         ].map((s) => (
           <Card key={s.label} className="border-border px-4 py-3 gap-0">
             <CardContent className="p-0">
-              <p className="text-xs font-mono text-faint uppercase tracking-widest mb-1">{s.label}</p>
+              <p className="text-xs font-mono text-faint mb-1">{s.label}</p>
               <p className="text-lg font-mono font-semibold text-ink">{s.value}</p>
             </CardContent>
           </Card>
@@ -158,7 +158,7 @@ export default async function UsagePage() {
                           className="font-mono text-xs text-faint truncate block"
                           title={(r.target_url as string) ?? ""}
                         >
-                          {(r.target_url as string) ?? "—"}
+                          {(r.target_url as string) ?? "-"}
                         </span>
                       </TableCell>
                       <TableCell className="px-4 py-3 whitespace-nowrap">
@@ -179,12 +179,12 @@ export default async function UsagePage() {
                         {r.credits_used as number}
                       </TableCell>
                       <TableCell className="px-4 py-3 font-mono text-xs text-faint">
-                        {r.latency_ms ? `${r.latency_ms as number}ms` : "—"}
+                        {r.latency_ms ? `${r.latency_ms as number}ms` : "-"}
                       </TableCell>
                       <TableCell className="px-4 py-3 font-mono text-xs text-faint">
                         {r.key_prefix
                           ? `${r.key_name as string} · ${r.key_prefix as string}••`
-                          : "—"}
+                          : "-"}
                       </TableCell>
                       <TableCell className="px-4 py-3 text-xs text-faint whitespace-nowrap">
                         {new Date(r.created_at as string).toLocaleString()}

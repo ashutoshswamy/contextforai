@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-// Only fires if the root layout itself throws — must render its own
+// Only fires if the root layout itself throws - must render its own
 // <html>/<body> since it replaces the whole tree, no shared styles/providers.
 export default function GlobalError({
   error,
@@ -19,8 +19,8 @@ export default function GlobalError({
     <html lang="en">
       <body
         style={{
-          backgroundColor: "#0C0C0C",
-          color: "#FFFFFF",
+          backgroundColor: "#f7f8fa",
+          color: "#0e1116",
           minHeight: "100vh",
           display: "flex",
           flexDirection: "column",
@@ -33,14 +33,14 @@ export default function GlobalError({
         }}
       >
         <h1 style={{ fontSize: "1.5rem", fontWeight: 600 }}>Something went wrong.</h1>
-        <p style={{ color: "#A3A3A3", maxWidth: 400 }}>
+        <p style={{ color: "#4a5260", maxWidth: 400 }}>
           The app failed to load. Try reloading the page.
         </p>
         <button
           onClick={() => reset()}
           style={{
-            background: "#FF4F00",
-            color: "#fff",
+            background: "#0e1116",
+            color: "#f7f8fa",
             padding: "0.5rem 1.25rem",
             border: "none",
             cursor: "pointer",

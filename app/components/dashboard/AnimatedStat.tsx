@@ -35,7 +35,7 @@ export default function AnimatedStat({
     <Card className="border-border p-5 gap-0">
       <CardContent className="p-0">
         <div className="flex items-center justify-between mb-2">
-          <p className="text-xs font-mono text-muted uppercase tracking-widest">{label}</p>
+          <p className="text-xs font-mono text-muted ">{label}</p>
           {icon && <span className="text-ember">{icon}</span>}
         </div>
         <p className="text-2xl font-mono font-bold text-ink">

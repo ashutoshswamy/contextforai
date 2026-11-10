@@ -1,5 +1,7 @@
 "use client";
 
+import { sileo } from "sileo";
+
 import { useState, useCallback } from "react";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -83,6 +85,7 @@ export default function PlaygroundClient({ embedded = false }: { embedded?: bool
     navigator.clipboard.writeText(text).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+      sileo.success({ title: "Copied to clipboard" });
     });
   }
 
@@ -100,7 +103,7 @@ export default function PlaygroundClient({ embedded = false }: { embedded?: bool
     <div className="space-y-3">
       <Card className="border-border p-4 gap-4">
         <div>
-          <Label className="block text-xs font-mono text-faint uppercase tracking-widest mb-1.5">API Key</Label>
+          <Label className="block text-xs font-mono text-faint mb-1.5">API Key</Label>
           <Input
             type="password"
             value={apiKey}
@@ -110,7 +113,7 @@ export default function PlaygroundClient({ embedded = false }: { embedded?: bool
           />
         </div>
         <div>
-          <Label className="block text-xs font-mono text-faint uppercase tracking-widest mb-1.5">URL</Label>
+          <Label className="block text-xs font-mono text-faint mb-1.5">URL</Label>
           <Input
             type="url"
             value={url}
@@ -123,7 +126,7 @@ export default function PlaygroundClient({ embedded = false }: { embedded?: bool
         </div>
       </Card>
       <Card className="border-border p-4">
-        <p className="text-xs font-mono text-faint uppercase tracking-widest mb-3">Endpoint</p>
+        <p className="text-xs font-mono text-faint mb-3">Endpoint</p>
         <div className="space-y-1">
           {ENDPOINTS.map((ep) => (
             <button
@@ -159,7 +162,7 @@ export default function PlaygroundClient({ embedded = false }: { embedded?: bool
               <Switch
                 checked={fullPage}
                 onCheckedChange={setFullPage}
-                className="data-[state=checked]:bg-ember"
+                className="data-[state=checked]:bg-primary"
               />
             </div>
             <div className="flex items-center justify-between">
@@ -170,7 +173,7 @@ export default function PlaygroundClient({ embedded = false }: { embedded?: bool
                     <TabsTrigger
                       key={f}
                       value={f}
-                      className="px-2.5 py-1 text-xs font-mono data-[state=active]:bg-ember data-[state=active]:text-white"
+                      className="px-2.5 py-1 text-xs font-mono data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
                     >
                       {f}
                     </TabsTrigger>
@@ -184,7 +187,7 @@ export default function PlaygroundClient({ embedded = false }: { embedded?: bool
       <Button
         onClick={run}
         disabled={loading || !apiKey || !url}
-        className="w-full py-2.5 h-auto bg-ember hover:bg-ember-hi disabled:opacity-40 text-white text-sm font-medium rounded-xl"
+        className="w-full" size="lg"
       >
         {loading ? "Running…" : <><span>Run</span><ArrowRight size={15} /></>}
       </Button>
@@ -200,7 +203,7 @@ export default function PlaygroundClient({ embedded = false }: { embedded?: bool
               <TabsTrigger
                 key={tab}
                 value={tab}
-                className="px-4 py-3 text-sm rounded-none border-b-2 border-transparent data-[state=active]:border-ember data-[state=active]:bg-transparent data-[state=active]:text-ember data-[state=active]:font-medium text-faint capitalize shadow-none"
+                className="px-4 py-3 text-sm rounded-md border-b-2 border-transparent data-[state=active]:border-ember data-[state=active]:bg-transparent data-[state=active]:text-ember data-[state=active]:font-medium text-faint capitalize shadow-none"
               >
                 {tab}
               </TabsTrigger>

@@ -5,14 +5,14 @@ import sql from "@/lib/db";
 import BillingCheckout from "@/app/components/dashboard/BillingCheckout";
 import PlanPicker from "@/app/components/dashboard/PlanPicker";
 
-export const metadata: Metadata = { title: "Billing — contextforai" };
+export const metadata: Metadata = { title: "Billing - contextforai" };
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const FREE_RATE_LIMIT = "20 requests/min (10 for screenshot/branding)";
 
-// Priced at ~₹0.05/credit, matching the Starter plan rate (₹499/10,000) — no
+// Priced at ~₹0.05/credit, matching the Starter plan rate (₹499/10,000) - no
 // commitment discount, so topups never undercut subscribing to a plan.
 const TOPUPS = [
   { id: "topup_500", credits: 500, price: "₹25" },
@@ -54,7 +54,7 @@ export default async function BillingPage() {
   return (
     <div className="p-4 md:p-8 w-full">
       <div className="mb-8">
-        <p className="text-xs font-mono text-faint uppercase tracking-widest mb-1">Billing</p>
+        <p className="text-xs font-mono text-faint mb-1">Billing</p>
         <h1 className="text-2xl font-semibold text-ink">Plans & Credits</h1>
         <p className="text-sm text-muted mt-1">
           Current plan:{" "}
@@ -74,7 +74,7 @@ export default async function BillingPage() {
 
       {/* Top-ups */}
       <div className="mb-8">
-        <p className="text-xs font-mono text-faint uppercase tracking-widest mb-1">
+        <p className="text-xs font-mono text-faint mb-1">
           Credit top-ups
         </p>
         <p className="text-xs text-faint mb-4">Expire 30 days after purchase.</p>
@@ -154,7 +154,7 @@ export default async function BillingPage() {
 
 function Th({ children }: { children?: React.ReactNode }) {
   return (
-    <TableHead className="px-5 py-2.5 text-left text-xs font-mono text-faint uppercase tracking-wide bg-raised h-auto">
+    <TableHead className="px-5 py-2.5 text-left text-xs font-mono text-faint bg-raised h-auto">
       {children}
     </TableHead>
   );

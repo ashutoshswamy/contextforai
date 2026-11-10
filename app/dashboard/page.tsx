@@ -5,7 +5,7 @@ import { Zap, Calendar, TrendingUp, Key, ArrowUpRight } from "lucide-react";
 import sql from "@/lib/db";
 import AnimatedStat from "@/app/components/dashboard/AnimatedStat";
 
-export const metadata: Metadata = { title: "Dashboard — contextforai" };
+export const metadata: Metadata = { title: "Dashboard - contextforai" };
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -86,8 +86,7 @@ export default async function DashboardPage() {
   return (
     <div className="p-4 md:p-8 w-full">
       <div className="mb-8">
-        <p className="text-xs font-mono text-faint uppercase tracking-widest mb-1">Dashboard</p>
-        <h1 className="text-2xl font-semibold text-ink">
+        <h1 className="font-display text-3xl font-extrabold text-ink">
           Welcome back{user?.firstName ? `, ${user.firstName}` : ""}
         </h1>
         <p className="text-sm text-muted mt-0.5">
@@ -102,10 +101,10 @@ export default async function DashboardPage() {
         <Card className="col-span-2 border-border p-5 flex-row items-center gap-6">
           <CreditRing balance={balance} total={monthly} />
           <CardContent className="p-0">
-            <p className="text-xs font-mono text-faint uppercase tracking-widest mb-1">Credits remaining</p>
+            <p className="text-xs font-mono text-faint mb-1">Credits remaining</p>
             <p className="text-3xl font-mono font-bold text-ink">{balance.toLocaleString()}</p>
             <p className="text-xs text-faint mt-1">of {monthly.toLocaleString()} monthly</p>
-            <Button variant="link" asChild className="px-0 h-auto mt-3 text-xs font-mono text-ember hover:text-ember-hi">
+            <Button variant="link" asChild className="px-0 h-auto mt-3 text-sm text-ember hover:text-ember-hi">
               <a href="/dashboard/billing">
                 Top up <ArrowUpRight size={12} />
               </a>
@@ -121,10 +120,10 @@ export default async function DashboardPage() {
         <AnimatedStat label="API keys" value={(keyCount?.count as number) ?? 0} unit="active" icon={<Key size={16} />} />
         <Card className="col-span-2 border-border p-5 gap-0 flex-row items-center justify-between">
           <div>
-            <p className="text-xs font-mono text-faint uppercase tracking-widest mb-1">Plan</p>
+            <p className="text-xs font-mono text-faint mb-1">Plan</p>
             <p className="text-lg font-mono font-semibold text-ink capitalize">{plan?.plan ?? "free"}</p>
           </div>
-          <Button asChild className="text-xs font-mono bg-ember hover:bg-ember-hi text-white">
+          <Button asChild size="sm">
             <a href="/dashboard/billing">Upgrade</a>
           </Button>
         </Card>
@@ -165,7 +164,7 @@ export default async function DashboardPage() {
                     </span>
                   </TableCell>
                   <TableCell className="px-5 py-3 font-mono text-xs text-muted">{r.credits_used as number}</TableCell>
-                  <TableCell className="px-5 py-3 font-mono text-xs text-faint">{r.latency_ms ? `${r.latency_ms}ms` : "—"}</TableCell>
+                  <TableCell className="px-5 py-3 font-mono text-xs text-faint">{r.latency_ms ? `${r.latency_ms}ms` : "-"}</TableCell>
                   <TableCell className="px-5 py-3 text-xs text-faint whitespace-nowrap">
                     {new Date(r.created_at as string).toLocaleString()}
                   </TableCell>
@@ -181,7 +180,7 @@ export default async function DashboardPage() {
 
 function Th({ children }: { children: React.ReactNode }) {
   return (
-    <TableHead className="px-5 py-2.5 text-left text-xs font-mono text-faint uppercase tracking-wide bg-raised h-auto">
+    <TableHead className="px-5 py-2.5 text-left text-xs font-mono text-faint bg-raised h-auto">
       {children}
     </TableHead>
   );

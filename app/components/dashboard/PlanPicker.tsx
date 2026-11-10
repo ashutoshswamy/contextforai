@@ -51,13 +51,13 @@ export default function PlanPicker({ currentPlan }: { currentPlan: string }) {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-        <p className="text-xs font-mono text-faint uppercase tracking-widest">Plans</p>
+        <p className="text-xs font-mono text-faint ">Plans</p>
         <Tabs value={cycle} onValueChange={(v) => setCycle(v as "monthly" | "yearly")}>
           <TabsList className="h-auto p-0.5 bg-raised">
-            <TabsTrigger value="monthly" className="px-3 py-1 text-xs font-mono data-[state=active]:bg-ember data-[state=active]:text-white">
+            <TabsTrigger value="monthly" className="px-3 py-1 text-xs font-mono data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               Monthly
             </TabsTrigger>
-            <TabsTrigger value="yearly" className="px-3 py-1 text-xs font-mono gap-1.5 data-[state=active]:bg-ember data-[state=active]:text-white">
+            <TabsTrigger value="yearly" className="px-3 py-1 text-xs font-mono gap-1.5 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               Yearly
               <Badge variant="outline" className="text-[9px] font-mono px-1 py-0 border-go/30 bg-go/10 text-go">20% off</Badge>
             </TabsTrigger>
@@ -90,7 +90,7 @@ export default function PlanPicker({ currentPlan }: { currentPlan: string }) {
                     </p>
                   </div>
                   {plan.highlight && (
-                    <Badge className="font-mono bg-ember text-white">Popular</Badge>
+                    <Badge className="font-mono bg-primary text-primary-foreground">Popular</Badge>
                   )}
                 </div>
                 <ul className="space-y-1.5 mb-5 flex-1">
@@ -125,7 +125,7 @@ export default function PlanPicker({ currentPlan }: { currentPlan: string }) {
                     credits={credits}
                     className={`w-full py-2 text-sm font-mono rounded-lg transition-colors ${
                       plan.highlight
-                        ? "bg-ember hover:bg-ember-hi text-white"
+                        ? "bg-primary hover:opacity-90 text-primary-foreground"
                         : "bg-surface border border-border hover:border-ember text-ink"
                     }`}
                   />

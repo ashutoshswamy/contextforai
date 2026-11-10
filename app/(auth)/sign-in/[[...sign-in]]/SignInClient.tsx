@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { SignIn } from "@clerk/nextjs";
+import { ConsentGate } from "@/components/consent-gate";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -30,10 +31,10 @@ export default function SignInClient() {
   return (
     <div ref={containerRef} className="min-h-screen flex flex-col lg:flex-row bg-bg">
       {/* Left Panel: Branding & Marketing (Hidden on Mobile) */}
-      <div className="hidden lg:flex lg:w-1/2 bg-surface hero-grid relative flex-col justify-between p-12 border-r border-border">
+      <div className="hidden lg:flex lg:w-1/2 bg-surface  relative flex-col justify-between p-12 border-r border-border">
         {/* Top: Logo */}
         <div className="anim-left opacity-0">
-          <Button variant="ghost" size="sm" asChild className="gap-1.5 font-mono text-sm font-semibold text-ink hover:opacity-80 hover:bg-transparent px-0">
+          <Button variant="ghost" size="sm" asChild className="gap-1.5 px-0 hover:bg-transparent">
             <a href="/">
               <ArrowLeft size={16} className="text-muted" /> contextforai
             </a>
@@ -42,7 +43,7 @@ export default function SignInClient() {
 
         {/* Middle: Content */}
         <div className="max-w-md">
-          <h1 className="anim-left opacity-0 text-4xl font-semibold tracking-tight text-ink mb-6 leading-[1.1]">
+          <h1 className="anim-left opacity-0 font-display text-5xl font-extrabold text-ink mb-6 leading-[1.1]">
             Turn the web into structured data.
           </h1>
           <p className="anim-left opacity-0 text-muted text-lg mb-10 leading-relaxed">
@@ -52,11 +53,11 @@ export default function SignInClient() {
           <div className="space-y-4 font-mono text-sm">
             <div className="anim-left opacity-0 flex items-center gap-3 text-ink">
               <CheckCircle2 size={16} className="text-go" />
-              <span>Sub-2 second response times</span>
+              <span>One key for all seven endpoints</span>
             </div>
             <div className="anim-left opacity-0 flex items-center gap-3 text-ink">
               <CheckCircle2 size={16} className="text-go" />
-              <span>Bypasses complex anti-bot protection</span>
+              <span>500 free credits every month</span>
             </div>
             <div className="anim-left opacity-0 flex items-center gap-3 text-ink">
               <CheckCircle2 size={16} className="text-go" />
@@ -67,14 +68,14 @@ export default function SignInClient() {
 
         {/* Bottom: Snippet / Footer */}
         <div className="anim-left opacity-0 font-mono text-xs text-faint">
-          © {new Date().getFullYear()} contextforai · industrial grade extraction
+          © {new Date().getFullYear()} contextforai
         </div>
       </div>
 
       {/* Right Panel: Auth */}
       <div className="flex-1 flex flex-col items-center justify-center p-6 relative">
         <div className="lg:hidden absolute top-6 left-6 anim-left opacity-0">
-          <Button variant="ghost" size="sm" asChild className="gap-1.5 font-mono text-sm text-faint hover:text-ink px-0">
+          <Button variant="ghost" size="sm" asChild className="gap-1.5 px-0 text-faint hover:bg-transparent hover:text-ink">
             <a href="/">
               <ArrowLeft size={14} /> contextforai
             </a>
@@ -82,19 +83,21 @@ export default function SignInClient() {
         </div>
 
         <div className="anim-form opacity-0 w-full max-w-[400px]">
+          <ConsentGate>{() => (
           <SignIn
             appearance={{
+              variables: { colorPrimary: "var(--btn)", colorForeground: "var(--ink)", colorBackground: "var(--surface)", colorInput: "var(--raised)", colorInputForeground: "var(--ink)", borderRadius: "2px", fontFamily: "var(--font-body), system-ui, sans-serif" },
               elements: {
-                rootBox: "w-full",
-                card: "bg-surface border border-border shadow-2xl shadow-black/50 rounded-none w-full",
+                rootBox: "w-full", cardBox: "shadow-none rounded-sm border-2 border-bar",
+                card: "bg-surface border-2 border-bar shadow-none rounded-sm w-full",
                 headerTitle: "text-ink font-semibold text-2xl tracking-tight",
                 headerSubtitle: "text-muted",
-                socialButtonsBlockButton: "border border-border bg-raised text-muted hover:text-ink hover:border-ink/20 transition-colors rounded-none",
+                socialButtonsBlockButton: "border border-border bg-raised text-muted hover:text-ink hover:border-ink/20 transition-colors rounded-md",
                 dividerLine: "bg-border",
-                dividerText: "text-faint font-mono text-xs uppercase tracking-widest",
+                dividerText: "text-faint font-mono text-xs ",
                 formFieldLabel: "text-muted text-sm font-medium",
-                formFieldInput: "bg-raised border-border text-ink placeholder:text-faint focus:border-ink rounded-none shadow-none",
-                formButtonPrimary: "bg-ember hover:bg-ember-hi text-white font-medium transition-colors rounded-none shadow-none",
+                formFieldInput: "bg-raised border-border text-ink placeholder:text-faint focus:border-ink rounded-md shadow-none",
+                formButtonPrimary: "!bg-none bg-primary hover:opacity-90 text-primary-foreground font-medium transition-colors rounded-md shadow-none",
                 footerActionLink: "text-ember hover:text-ember-hi font-medium",
                 identityPreviewText: "text-muted",
                 identityPreviewEditButton: "text-ember hover:text-ember-hi",
@@ -102,6 +105,7 @@ export default function SignInClient() {
               },
             }}
           />
+          )}</ConsentGate>
         </div>
       </div>
     </div>

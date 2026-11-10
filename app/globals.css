@@ -2,234 +2,334 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
+/* Dark via .dark on <html> (next-themes; "system" resolves to OS). */
+@custom-variant dark (&:where(.dark, .dark *));
 
-@theme inline {
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
-  --color-card: var(--card);
-  --color-foreground: var(--foreground);
-  --color-background: var(--background);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
+/*
+  GLAZIER COLOR-FIELD SYSTEM
+  A steel-framed glass partition. Matte black glazing bars are the only line ink.
+  Panes are clear or seeded white. Three glass colors are reserved for what matters
+  now: cobalt = selected / primary action, amber = credits and cost, oxblood = error.
+*/
+:root {
+  --bg: #e4e9ec;          /* daylight behind the wall */
+  --surface: #f5f7f8;     /* clear seeded glass */
+  --raised: #e9eef1;      /* frosted glass */
+  --line: #c3ccd3;        /* hairline inside a pane */
+  --bar: #0e1114;         /* matte black glazing bar */
+  --ink: #0e1114;
+  --muted: #444e58;
+  --faint: #5f6a75;
+  --accent: #1d4ed8;      /* cobalt glass */
+  --accent-hi: #1a42b8;
+  --accent-ink: #ffffff;
+  --btn: #0e1114;
+  --btn-ink: #f5f7f8;
+  --amber-glass: #f2b01e;
+  --amber-ink: #0e1114;
+
+  /* chart / legacy series, all drawn from the three glasses and their tints */
+  --l-markdown: #1d4ed8;
+  --l-html: #d99a00;
+  --l-json: #8a1c2b;
+  --l-sitemap: #0e1114;
+  --l-fonts: #7c9cf0;
+  --l-screenshot: #f0cb6a;
+  --l-branding: #c77a86;
+
+  --go: #17803d;
+  --stop: #8a1c2b;
+  --warn: #8a5a00;
+
+  --radius: 0.125rem;
+  color-scheme: light;
 }
 
-@theme {
-  /* Layout — Deep charcoal/black */
-  --color-bg: #0C0C0C;
-  --color-surface: #131313;
-  --color-raised: #1A1A1A;
-  --color-border: #333333;
+.dark {
+  --bg: #07090b;
+  --surface: #161b21;
+  --raised: #1e252d;
+  --line: #2c353f;
+  --bar: #020304;
+  --ink: #f0f3f5;
+  --muted: #aab4be;
+  --faint: #8792a0;
+  --accent: #5b87ff;
+  --accent-hi: #86a5ff;
+  --accent-ink: #050a1a;
+  --btn: #f0f3f5;
+  --btn-ink: #0e1114;
+  --amber-glass: #f2b01e;
+  --amber-ink: #0e1114;
 
-  /* Text */
-  --color-ink: #FFFFFF;
-  --color-muted: #A3A3A3;
-  --color-faint: #666666;
+  --l-markdown: #5b87ff;
+  --l-html: #f2b01e;
+  --l-json: #d9566a;
+  --l-sitemap: #f0f3f5;
+  --l-fonts: #7c9cf0;
+  --l-screenshot: #f0cb6a;
+  --l-branding: #c77a86;
 
-  /* Primary (was ember/teal) -> Industrial Orange */
-  --color-ember: #FF4F00;
-  --color-ember-hi: #FF6B2B;
+  --go: #4ade80;
+  --stop: #ff7b8a;
+  --warn: #f2b84b;
+  color-scheme: dark;
+}
 
-  /* Sidebar / CTA chassis (was violet) -> Deep Space Gray */
-  --color-violet: #1A1A1A;
-  --color-violet-hi: #2A2A2A;
+@theme inline {
+  --font-sans: var(--font-body), system-ui, sans-serif;
+  /* Only two families by brief: Bricolage Grotesque (display) + DM Sans (body, code). */
+  --font-mono: var(--font-body), system-ui, sans-serif;
+  --font-heading: var(--font-display), var(--font-body), sans-serif;
+  --font-display: var(--font-display), var(--font-body), sans-serif;
 
-  /* Secondary (was sky) -> Neon Cyan */
-  --color-sky: #00E5FF;
-  --color-sky-hi: #33EBFF;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-border: var(--line);
+  --color-ink: var(--ink);
+  --color-bar: var(--bar);
+  --color-amber-glass: var(--amber-glass);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-ember: var(--accent);
+  --color-ember-hi: var(--accent-hi);
+  --color-violet: var(--raised);
+  --color-violet-hi: var(--line);
+  --color-sky: var(--l-json);
+  --color-sky-hi: var(--l-json);
+  --color-go: var(--go);
+  --color-stop: var(--stop);
+  --color-amber: var(--warn);
 
-  /* Prism Accents - For Endpoints */
-  --color-prism-markdown: #FFB000;
-  --color-prism-html: #FF6B35;
-  --color-prism-json: #00E5FF;
-  --color-prism-sitemap: #B900FF;
-  --color-prism-fonts: #3B82F6;
-  --color-prism-screenshot: #00FF66;
-  --color-prism-branding: #FF007F;
+  --color-prism-markdown: var(--l-markdown);
+  --color-prism-html: var(--l-html);
+  --color-prism-json: var(--l-json);
+  --color-prism-sitemap: var(--l-sitemap);
+  --color-prism-fonts: var(--l-fonts);
+  --color-prism-screenshot: var(--l-screenshot);
+  --color-prism-branding: var(--l-branding);
 
-  /* Semantic */
-  --color-go: #00FF66;
-  --color-stop: #FF0033;
-  --color-amber: #FFB000;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent-ui);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 
-  --radius-none: 0px;
-  --radius-sm: 0px;
-  --radius-md: 0px;
-  --radius-lg: 0px;
-  --radius-xl: 0px;
-  --radius-2xl: 0px;
-  --radius-3xl: 0px;
-  --radius-full: 0px;
+  /* One shape rule: glass is rectilinear. 2px everywhere, nothing round. */
+  --radius-sm: 1px;
+  --radius-md: 2px;
+  --radius-lg: 2px;
+  --radius-xl: 2px;
+  --radius-2xl: 2px;
+  --radius-3xl: 2px;
+  --radius-4xl: 2px;
+}
+
+/* shadcn semantic tokens, mapped onto the system */
+:root {
+  --background: var(--bg);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--btn);
+  --primary-foreground: var(--btn-ink);
+  --secondary: var(--raised);
+  --secondary-foreground: var(--ink);
+  --muted-foreground: var(--muted);
+  --accent-ui: var(--raised);
+  --accent-foreground: var(--ink);
+  --destructive: var(--stop);
+  --input: var(--line);
+  --ring: var(--accent);
+  --chart-1: var(--l-markdown);
+  --chart-2: var(--l-json);
+  --chart-3: var(--l-branding);
+  --chart-4: var(--l-sitemap);
+  --chart-5: var(--l-screenshot);
+  --sidebar: var(--surface);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--btn);
+  --sidebar-primary-foreground: var(--btn-ink);
+  --sidebar-accent: var(--raised);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--accent);
 }
 
 html {
   scroll-behavior: smooth;
-  background-color: var(--color-bg);
+  background-color: var(--bg);
 }
 
 body {
-  background-color: var(--color-bg);
-  color: var(--color-ink);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-variant-numeric: tabular-nums;
 }
 
-::selection {
-  background-color: var(--color-ember);
-  color: #000000;
+h1, h2, h3, .font-display {
+  font-family: var(--font-display), var(--font-body), sans-serif;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 
-/* Subtle grid — reads as "data grid" on the dark bg */
-.hero-grid {
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 64px 64px;
+p { text-wrap: pretty; }
+
+/* Browser surfaces carry the system */
+::selection { background: var(--accent); color: var(--accent-ink); }
+/* No focus rings on buttons, links, tabs or menu items. Text fields keep theirs. */
+:focus-visible { outline: none; }
+:is(button, a, summary, [role="tab"], [role="menuitem"], [role="button"], [role="switch"], [role="checkbox"], [data-radix-collection-item]):focus-visible,
+:is(button, a, summary, [role="tab"], [role="menuitem"], [role="button"], [data-radix-collection-item]):focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+a { text-underline-offset: 3px; }
+* { scrollbar-color: var(--line) transparent; }
+
+pre, code, kbd, samp {
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+@layer base {
+  pre { white-space: pre; tab-size: 2; }
 }
 
-.ember-card {
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
+@layer components {
+/* THE WALL: a grid whose gap is the glazing bar. Panes sit inside it. */
+.wall {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  padding: 8px;
+  background: var(--bar);
+}
+.pane {
+  position: relative;
+  isolation: isolate;
+  background-color: var(--surface);
+  color: var(--ink);
+  transition: background-color 450ms cubic-bezier(0.16, 1, 0.3, 1), color 450ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* Hover: glass floods from below. GSAP drives --flood (0 to 1). */
+.pane[data-flood]::before,
+a.pane::before,
+button.pane::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: color-mix(in oklab, var(--accent) 13%, transparent);
+  transform: scaleY(var(--flood, 0));
+  transform-origin: bottom;
+  pointer-events: none;
+}
+.pane[data-glass]::before { display: none; }
+/* Amber glass backlight: a clear sheet slides off to light the pane. GSAP drives --lit. */
+.pane[data-glass="amber"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--surface);
+  transform: scaleX(calc(1 - var(--lit, 1)));
+  transform-origin: right;
+  pointer-events: none;
 }
 
-.ember-card:hover {
-  border-color: var(--color-ember);
-  box-shadow: 4px 4px 0px var(--color-ember);
-  transform: translate(-2px, -2px);
+/* Flooded panes: the glass lights from behind. */
+.pane[data-glass="cobalt"] { background-color: var(--accent); color: var(--accent-ink); background-image: none; }
+.pane[data-glass="amber"] { background-color: var(--amber-glass); color: var(--amber-ink); background-image: none; }
+.pane[data-glass="amber"] .credit-chip { background: var(--bar); color: #f0f3f5; }
+.pane[data-glass="ink"] { background-color: var(--bar); color: #f0f3f5; background-image: none; }
+
+/* A framed single sign (docs, dashboard, auth): one pane in a bar frame. */
+.sign {
+  background: var(--surface);
+  border: 2px solid var(--bar);
 }
+
+/* Cost mark: amber glass chip */
+.credit-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 1.5rem;
+  padding: 0 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: var(--amber-glass);
+  color: var(--amber-ink);
+}
+
+/* Brand mark: a four-pane window with one lit */
+.mark {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: currentColor;
+  padding: 2px;
+}
+.mark i { display: block; background: var(--surface); }
+.mark i:first-child { background: var(--accent); }
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+.rise { animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: var(--delay, 0s); }
 
 @media (prefers-reduced-motion: reduce) {
-  .ember-card { transition: none; transform: none !important; box-shadow: none !important; }
-}
-
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* Nav scroll state */
-.nav-scrolled {
-  background: rgba(12, 12, 12, 0.8) !important;
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--color-border);
-}
-
-:root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-.dark {
-  --background: var(--color-bg);
-  --foreground: var(--color-ink);
-  --card: var(--color-surface);
-  --card-foreground: var(--color-ink);
-  --popover: var(--color-raised);
-  --popover-foreground: var(--color-ink);
-  --primary: var(--color-ember);
-  --primary-foreground: #000000;
-  --secondary: var(--color-violet-hi);
-  --secondary-foreground: var(--color-ink);
-  --muted: var(--color-raised);
-  --muted-foreground: var(--color-muted);
-  --accent: var(--color-raised);
-  --accent-foreground: var(--color-ink);
-  --destructive: var(--color-stop);
-  --border: var(--color-border);
-  --input: var(--color-border);
-  --ring: var(--color-ember);
-  --chart-1: var(--color-ember);
-  --chart-2: var(--color-sky);
-  --chart-3: var(--color-amber);
-  --chart-4: var(--color-go);
-  --chart-5: var(--color-prism-branding);
-  --sidebar: var(--color-surface);
-  --sidebar-foreground: var(--color-ink);
-  --sidebar-primary: var(--color-ember);
-  --sidebar-primary-foreground: #000000;
-  --sidebar-accent: var(--color-raised);
-  --sidebar-accent-foreground: var(--color-ink);
-  --sidebar-border: var(--color-border);
-  --sidebar-ring: var(--color-ember);
+  .rise { animation: none; }
+  html { scroll-behavior: auto; }
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-  html {
-    @apply font-sans;
-  }
+  * { @apply border-border outline-ring/50; }
+  body { @apply bg-background text-foreground; }
+  html { @apply font-sans; }
+}
+
+/* Landing motion: everything starts clear only when JS will animate it. */
+@media (prefers-reduced-motion: no-preference) {
+  .m-init .pane { opacity: 0; }
+  .m-init .pane[data-glass="amber"] { --lit: 0; }
 }

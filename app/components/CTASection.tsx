@@ -1,112 +1,28 @@
 "use client";
 
-import { useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
 import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useIsLoggedIn } from "./useIsLoggedIn";
 
-gsap.registerPlugin(ScrollTrigger);
-
-export default function CTASection({ isLoggedIn }: { isLoggedIn: boolean }) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const headingInnerRef = useRef<HTMLSpanElement>(null);
-  const subRef = useRef<HTMLParagraphElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(() => {
-    const inner = headingInnerRef.current;
-    const sub = subRef.current;
-    const cta = ctaRef.current;
-    if (!inner) return;
-
-    const mm = gsap.matchMedia();
-
-    mm.add("(prefers-reduced-motion: reduce)", () => {
-      gsap.set(inner, { y: 0 });
-      gsap.set([sub, cta], { opacity: 1, y: 0 });
-    });
-
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      gsap.set(inner, { y: "100%" });
-      gsap.set([sub, cta], { opacity: 0, y: 12 });
-
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: "top 70%",
-        once: true,
-        onEnter: () => {
-          const tl = gsap.timeline();
-          tl.to(inner, { y: 0, duration: 0.8, ease: "power3.out" })
-            .to(sub, { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }, "-=0.4")
-            .to(cta, { opacity: 1, y: 0, duration: 0.4, ease: "power2.out" }, "-=0.3");
-        },
-      });
-    });
-  }, { scope: sectionRef });
-
+export default function CTASection() {
+  const isLoggedIn = useIsLoggedIn();
   return (
-    <section
-      ref={sectionRef}
-      className="py-16 md:py-24 w-full"
-    >
-      <div className="max-w-5xl mx-auto px-6 text-center">
-
-        {/* Wordmark heading */}
-        <div style={{ overflow: "hidden" }} className="mb-6">
-          <span
-            ref={headingInnerRef}
-            className="block text-white font-bold leading-none"
-            style={{
-              fontSize: "clamp(56px, 10vw, 120px)",
-              letterSpacing: "-0.04em",
-            }}
-          >
-            contextforai
-          </span>
-        </div>
-
-        {/* Tagline */}
-        <p
-          ref={subRef}
-          className="font-mono mb-10"
-          style={{ color: "#555", fontSize: "13px" }}
-        >
-          500 free credits. No credit card required.
-        </p>
-
-        {/* CTAs */}
-        <div
-          ref={ctaRef}
-          className="flex items-center justify-center gap-4 flex-wrap mb-8"
-        >
-          <Button
-            asChild
-            className="gap-2 px-6 py-3 h-auto text-black font-medium hover:opacity-80"
-            style={{ backgroundColor: "#FFFFFF", fontSize: "14px", fontWeight: 500 }}
-          >
-            <a href={isLoggedIn ? "/dashboard" : "/sign-up"}>
-              {isLoggedIn ? "Go to dashboard" : "Start building free"}
-              <ArrowRight size={14} />
-            </a>
-          </Button>
-          <Button
-            asChild
-            variant="ghost"
-            className="h-auto p-0 text-sm font-normal hover:underline hover:bg-transparent"
-            style={{ color: "rgba(255,255,255,0.5)", fontSize: "14px" }}
-          >
+    <section className="bg-bg pt-20 lg:pt-28">
+      <div className="wall mx-auto max-w-[1400px]">
+        <div data-glass="cobalt" data-expand className="pane flex min-h-[22rem] flex-col justify-between gap-12 p-6 sm:p-10 lg:flex-row lg:items-end">
+          <h2 className="max-w-3xl font-display text-5xl font-extrabold leading-[1.02] sm:text-6xl xl:text-7xl">Send your first URL today.</h2>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
             <a
-              href="/dashboard/playground"
-              onMouseOver={(e) => (e.currentTarget.style.color = "#fff")}
-              onMouseOut={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.5)")}
+              href={isLoggedIn ? "/dashboard" : "/sign-up"}
+              data-magnetic className="inline-flex h-12 items-center gap-2 bg-[var(--accent-ink)] px-6 text-base font-semibold text-[var(--accent)] transition-opacity hover:opacity-90"
             >
-              Open playground
+              {isLoggedIn ? "Go to dashboard" : "Get started free"}
+              <ArrowRight size={18} />
             </a>
-          </Button>
+            <a href="/dashboard/playground" className="text-base font-semibold underline decoration-2 underline-offset-[6px]">
+              Open the playground
+            </a>
+          </div>
         </div>
-
       </div>
     </section>
   );

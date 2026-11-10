@@ -1,210 +1,109 @@
 "use client";
 
-import { useRef, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
+import { useState } from "react";
 import { Check, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useIsLoggedIn } from "./useIsLoggedIn";
 import BillingCheckout from "@/app/components/dashboard/BillingCheckout";
-
-gsap.registerPlugin(ScrollTrigger);
 
 type Plan = {
   id: string;
   name: string;
-  monthlyCredits: number;
-  monthlyPrice: string;
-  yearlyPrice: string;
-  rateLimit: string;
-  highlight?: boolean;
-};
-
-const FREE = {
-  name: "Free",
-  price: "₹0",
-  credits: 500,
-  rateLimit: "20 requests/min (10 for screenshot/branding)",
+  credits: number;
+  monthly: string;
+  yearly: string;
+  rate: string;
+  popular?: boolean;
 };
 
 const PLANS: Plan[] = [
-  {
-    id: "starter",
-    name: "Starter",
-    monthlyCredits: 10000,
-    monthlyPrice: "₹499",
-    yearlyPrice: "₹4,790",
-    rateLimit: "60 requests/min (30 for screenshot/branding)",
-  },
-  {
-    id: "growth",
-    name: "Growth",
-    monthlyCredits: 50000,
-    monthlyPrice: "₹999",
-    yearlyPrice: "₹9,590",
-    rateLimit: "120 requests/min (60 for screenshot/branding)",
-    highlight: true,
-  },
-  {
-    id: "pro",
-    name: "Pro",
-    monthlyCredits: 100000,
-    monthlyPrice: "₹1,999",
-    yearlyPrice: "₹19,190",
-    rateLimit: "180 requests/min (90 for screenshot/branding)",
-  },
+  { id: "free", name: "Free", credits: 500, monthly: "₹0", yearly: "₹0", rate: "20 requests/min (10 for screenshot and branding)" },
+  { id: "starter", name: "Starter", credits: 10000, monthly: "₹499", yearly: "₹4,790", rate: "60 requests/min (30 for screenshot and branding)" },
+  { id: "growth", name: "Growth", credits: 50000, monthly: "₹999", yearly: "₹9,590", rate: "120 requests/min (60 for screenshot and branding)", popular: true },
+  { id: "pro", name: "Pro", credits: 100000, monthly: "₹1,999", yearly: "₹19,190", rate: "180 requests/min (90 for screenshot and branding)" },
 ];
 
-export default function PricingSection({ isLoggedIn }: { isLoggedIn: boolean }) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<HTMLDivElement>(null);
+const n = (x: number) => x.toLocaleString("en-IN");
+
+export default function PricingSection() {
+  const isLoggedIn = useIsLoggedIn();
   const [cycle, setCycle] = useState<"monthly" | "yearly">("monthly");
 
-  useGSAP(() => {
-    const mm = gsap.matchMedia();
-
-    mm.add("(prefers-reduced-motion: reduce)", () => {
-      gsap.set([headerRef.current, cardsRef.current], { opacity: 1, y: 0 });
-    });
-
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      gsap.set(headerRef.current, { opacity: 0, y: 12 });
-      gsap.set(cardsRef.current, { opacity: 0, y: 20 });
-
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: "top 70%",
-        once: true,
-        onEnter: () => {
-          const tl = gsap.timeline();
-          tl.to(headerRef.current, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" })
-            .to(cardsRef.current, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }, "-=0.3");
-        },
-      });
-    });
-  }, { scope: sectionRef });
-
   return (
-    <section ref={sectionRef} id="pricing" className="py-16 md:py-24 w-full">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div ref={headerRef} className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
-          <div>
-            <h2 className="text-2xl font-semibold tracking-tight text-ink">Simple, credit-based pricing.</h2>
-            <p className="text-sm text-muted mt-1">Start free. Upgrade when you need more.</p>
+    <section id="pricing" className="scroll-mt-14 bg-bg pt-20 lg:pt-28">
+      <div className="wall mx-auto max-w-[1400px] sm:grid-cols-2 lg:grid-cols-4">
+        <div className="pane flex flex-col gap-6 p-6 sm:col-span-2 sm:p-10 lg:col-span-4 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-2xl">
+            <h2 className="font-display text-4xl font-extrabold leading-tight sm:text-5xl">Pay in credits, not seats.</h2>
+            <p className="mt-4 text-lg text-muted">Markdown, HTML, JSON, sitemap, and fonts cost 5 credits a call. Screenshot and branding cost 10.</p>
           </div>
-          <Tabs value={cycle} onValueChange={(v) => setCycle(v as "monthly" | "yearly")}>
-            <TabsList className="h-auto p-0.5 bg-raised">
-              <TabsTrigger value="monthly" className="px-3 py-1 text-xs font-mono data-[state=active]:bg-ember data-[state=active]:text-white">
-                Monthly
-              </TabsTrigger>
-              <TabsTrigger value="yearly" className="px-3 py-1 text-xs font-mono gap-1.5 data-[state=active]:bg-ember data-[state=active]:text-white">
-                Yearly
-                <Badge variant="outline" className="text-[9px] font-mono px-1 py-0 border-go/30 bg-go/10 text-go">20% off</Badge>
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </div>
-
-        <div ref={cardsRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {/* Free */}
-          <Card className="border-border p-5 flex flex-col">
-            <CardContent className="p-0 flex flex-col flex-1">
-              <p className="font-semibold text-ink mb-1">{FREE.name}</p>
-              <p className="text-2xl font-mono font-bold text-ink mb-4">
-                {FREE.price}<span className="text-sm font-normal text-faint">/forever</span>
-              </p>
-              <ul className="space-y-1.5 mb-5 flex-1">
-                <li className="flex items-center gap-2 text-sm text-muted">
-                  <Check size={13} className="text-ember shrink-0" />
-                  {FREE.credits.toLocaleString()} credits/month
-                </li>
-                <li className="flex items-center gap-2 text-sm text-muted">
-                  <Check size={13} className="text-ember shrink-0" />
-                  All endpoints
-                </li>
-                <li className="flex items-center gap-2 text-sm text-muted">
-                  <Check size={13} className="text-ember shrink-0" />
-                  {FREE.rateLimit}
-                </li>
-              </ul>
-              <Button asChild variant="outline" className="w-full border-border hover:border-ember text-ink">
-                <a href="/sign-up">Get started free</a>
-              </Button>
-            </CardContent>
-          </Card>
-
-          {PLANS.map((plan) => {
-            const price = cycle === "yearly" ? plan.yearlyPrice : plan.monthlyPrice;
-            const credits = cycle === "yearly" ? plan.monthlyCredits * 12 : plan.monthlyCredits;
-            const creditsLabel = cycle === "yearly"
-              ? `${credits.toLocaleString()} credits/year`
-              : `${credits.toLocaleString()} credits/month`;
-
-            return (
-              <Card
-                key={plan.id}
-                className={`p-5 flex flex-col ${plan.highlight ? "border-ember/50 bg-ember/5" : "border-border"}`}
+          <div role="group" aria-label="Billing cycle" className="inline-flex shrink-0 self-start border-2 border-bar bg-surface lg:self-auto">
+            {(["monthly", "yearly"] as const).map((c) => (
+              <button
+                key={c}
+                aria-pressed={cycle === c}
+                onClick={() => setCycle(c)}
+                className={`px-4 py-2 text-sm font-semibold capitalize transition-colors ${cycle === c ? "bg-bar text-[#f0f3f5]" : "text-muted hover:text-ink"}`}
               >
-                <CardContent className="p-0 flex flex-col flex-1">
-                  <div className="flex items-start justify-between mb-1">
-                    <p className="font-semibold text-ink">{plan.name}</p>
-                    {plan.highlight && <Badge className="font-mono bg-ember text-white">Popular</Badge>}
-                  </div>
-                  <p className="text-2xl font-mono font-bold text-ink mb-4">
-                    {price}<span className="text-sm font-normal text-faint">/{cycle === "yearly" ? "year" : "month"}</span>
-                  </p>
-                  <ul className="space-y-1.5 mb-5 flex-1">
-                    <li className="flex items-center gap-2 text-sm text-muted">
-                      <Check size={13} className="text-ember shrink-0" />
-                      {creditsLabel}
-                    </li>
-                    <li className="flex items-center gap-2 text-sm text-muted">
-                      <Check size={13} className="text-ember shrink-0" />
-                      All endpoints
-                    </li>
-                    <li className="flex items-center gap-2 text-sm text-muted">
-                      <Check size={13} className="text-ember shrink-0" />
-                      {plan.rateLimit}
-                    </li>
-                    {plan.id !== "starter" && (
-                      <li className="flex items-center gap-2 text-sm text-muted">
-                        <Check size={13} className="text-ember shrink-0" />
-                        Priority queue
-                      </li>
-                    )}
-                  </ul>
-                  {isLoggedIn ? (
-                    <BillingCheckout
-                      productId={cycle === "yearly" ? `plan_${plan.id}_yearly` : `plan_${plan.id}`}
-                      label={`${plan.name} (${cycle})`}
-                      priceDisplay={price}
-                      credits={credits}
-                      className={
-                        plan.highlight
-                          ? "w-full gap-1.5 bg-ember hover:bg-ember-hi text-white"
-                          : "w-full gap-1.5 border border-border hover:border-ember bg-transparent text-ink"
-                      }
-                    />
-                  ) : (
-                    <Button
-                      asChild
-                      className={plan.highlight ? "w-full gap-1.5 bg-ember hover:bg-ember-hi text-white" : "w-full gap-1.5 border border-border hover:border-ember bg-transparent text-ink"}
-                      variant={plan.highlight ? "default" : "outline"}
-                    >
-                      <a href="/sign-in?redirect_url=/dashboard/billing">
-                        Sign in to purchase <ArrowRight size={14} />
-                      </a>
-                    </Button>
-                  )}
-                </CardContent>
-              </Card>
-            );
-          })}
+                {c}
+                {c === "yearly" && <span className="ml-2 text-xs normal-case opacity-80">20% off</span>}
+              </button>
+            ))}
+          </div>
         </div>
+        {PLANS.map((plan) => {
+          const price = cycle === "yearly" ? plan.yearly : plan.monthly;
+          const credits = cycle === "yearly" ? plan.credits * 12 : plan.credits;
+          const period = plan.id === "free" ? "forever" : cycle === "yearly" ? "year" : "month";
+          const featured = !!plan.popular;
+          const buy = featured
+            ? "h-12 w-full gap-2 border-2 border-bar bg-bar font-semibold text-[#f0f3f5] hover:opacity-90"
+            : "h-12 w-full gap-2 border-2 border-bar bg-transparent font-semibold text-ink hover:bg-raised";
+          return (
+            <div key={plan.id} className="pane flex flex-col p-6">
+              <div className="flex items-center justify-between">
+                <h3 className="font-display text-xl font-bold">{plan.name}</h3>
+                {featured && <span className="bg-bar px-2 py-0.5 text-xs font-bold text-[#f0f3f5]">Popular</span>}
+              </div>
+              <p className="mt-5 font-display text-5xl font-extrabold">
+                {price}
+                <span className="ml-1 text-base font-medium text-faint">/{period}</span>
+              </p>
+              <p className="mt-4">
+                <span className="credit-chip">
+                  {n(credits)} credits
+                </span>
+              </p>
+              <p className="mt-2 text-sm text-muted">
+                {n(Math.floor(credits / 5))} Markdown calls or {n(Math.floor(credits / 10))} screenshots
+              </p>
+              <ul className="mt-5 flex-1 space-y-2.5 text-sm text-muted">
+                {["All seven endpoints", plan.rate, ...(plan.id === "growth" || plan.id === "pro" ? ["Priority queue"] : [])].map((f) => (
+                  <li key={f} className="flex gap-2.5">
+                    <Check size={16} className="mt-0.5 shrink-0" aria-hidden />
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-7">
+                {plan.id === "free" ? (
+                  <a href="/sign-up" className={`inline-flex items-center justify-center text-sm ${buy}`}>Get started free <ArrowRight size={16} /></a>
+                ) : isLoggedIn ? (
+                  <BillingCheckout
+                    productId={cycle === "yearly" ? `plan_${plan.id}_yearly` : `plan_${plan.id}`}
+                    label={`${plan.name} (${cycle})`}
+                    priceDisplay={price}
+                    credits={credits}
+                    className={buy}
+                  />
+                ) : (
+                  <a href="/sign-in?redirect_url=/dashboard/billing" className={`inline-flex items-center justify-center text-sm ${buy}`}>
+                    Sign in to purchase <ArrowRight size={16} />
+                  </a>
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );

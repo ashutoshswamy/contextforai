@@ -12,7 +12,7 @@ function normalizeHex(hex: string): string | null {
   const h = hex.toLowerCase();
   if (NEUTRAL_HEX.has(h)) return null;
   const full = h.length === 3 ? h.split("").map((c) => c + c).join("") : h;
-  // near-black / near-white — not useful as brand colors
+  // near-black / near-white - not useful as brand colors
   const n = parseInt(full, 16);
   const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
   const max = Math.max(r, g, b), min = Math.min(r, g, b);

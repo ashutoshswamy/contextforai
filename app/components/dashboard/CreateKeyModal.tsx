@@ -1,5 +1,7 @@
 "use client";
 
+import { sileo } from "sileo";
+
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Check, Download } from "lucide-react";
@@ -42,6 +44,7 @@ export default function CreateKeyModal() {
     navigator.clipboard.writeText(newKey).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+      sileo.success({ title: "Copied to clipboard" });
     });
   }
 
@@ -85,7 +88,7 @@ export default function CreateKeyModal() {
       }}
     >
       <DialogTrigger asChild>
-        <Button className="text-sm font-mono bg-ember hover:bg-ember-hi text-white">
+        <Button size="sm">
           + Create key
         </Button>
       </DialogTrigger>
@@ -116,7 +119,7 @@ export default function CreateKeyModal() {
               <Button
                 onClick={create}
                 disabled={loading}
-                className="w-full text-sm font-mono bg-ember hover:bg-ember-hi text-white"
+                className="w-full"
               >
                 {loading ? "Generating…" : <><span>Generate key</span><ArrowRight size={14} /></>}
               </Button>
@@ -139,14 +142,14 @@ export default function CreateKeyModal() {
                 <Button
                   variant="outline"
                   onClick={() => downloadAs("csv")}
-                  className="flex-1 text-xs font-mono bg-surface border-border hover:border-ember text-muted hover:text-ink"
+                  className="flex-1" size="sm"
                 >
                   <Download size={12} /> Save CSV
                 </Button>
                 <Button
                   variant="outline"
                   onClick={() => downloadAs("json")}
-                  className="flex-1 text-xs font-mono bg-surface border-border hover:border-ember text-muted hover:text-ink"
+                  className="flex-1" size="sm"
                 >
                   <Download size={12} /> Save JSON
                 </Button>
@@ -156,13 +159,13 @@ export default function CreateKeyModal() {
                 <Button
                   variant="outline"
                   onClick={copy}
-                  className="flex-1 text-sm font-mono bg-raised border-border hover:border-ember text-muted"
+                  className="flex-1"
                 >
                   {copied ? <span className="inline-flex items-center gap-1.5"><Check size={13} /> Copied</span> : "Copy key"}
                 </Button>
                 <Button
                   onClick={close}
-                  className="flex-1 text-sm font-mono bg-ember hover:bg-ember-hi text-white"
+                  className="flex-1"
                 >
                   Done
                 </Button>

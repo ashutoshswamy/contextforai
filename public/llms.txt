@@ -1,0 +1,10 @@
+# contextforai
+
+> One API that turns any URL into clean Markdown, HTML, JSON, a sitemap, fonts, a screenshot, or brand assets. Pay in credits (5 per call, 10 for screenshot and branding). 500 free credits to start.
+
+## Docs
+- [API reference](https://contextforai.ashutoshswamy.in/docs): authentication, endpoints, schemas, rate limits, error codes
+
+## Policies
+- [Terms of Service](https://contextforai.ashutoshswamy.in/terms)
+- [Privacy Policy](https://contextforai.ashutoshswamy.in/privacy)

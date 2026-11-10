@@ -1,77 +1,47 @@
+import { Wordmark } from "./Navbar";
+
 const LINKS = {
   Product: [
-    { label: "Endpoints", href: "/#endpoints" },
+    { label: "Endpoints", href: "/#lines" },
     { label: "Quickstart", href: "/#quickstart" },
     { label: "Playground", href: "/playground" },
     { label: "Dashboard", href: "/dashboard" },
   ],
   Developers: [
     { label: "Documentation", href: "/docs" },
-    { label: "API Keys", href: "/dashboard/keys" },
+    { label: "API keys", href: "/dashboard/keys" },
     { label: "Analytics", href: "/dashboard/analytics" },
     { label: "Billing", href: "/dashboard/billing" },
   ],
   Legal: [
-    { label: "Privacy Policy", href: "/privacy" },
-    { label: "Terms of Service", href: "/terms" },
+    { label: "Privacy policy", href: "/privacy" },
+    { label: "Terms of service", href: "/terms" },
   ],
 };
 
 export default function Footer() {
   return (
-    <footer className="bg-bg">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-        {/* Top: brand + columns */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-10">
-          {/* Brand */}
+    <footer className="mt-20 bg-bar text-[#f0f3f5] lg:mt-28">
+      <div className="mx-auto max-w-[1400px] px-4 py-14 sm:px-6">
+        <div className="grid grid-cols-2 gap-10 sm:grid-cols-4">
           <div className="col-span-2 sm:col-span-1">
-            <a
-              href="/"
-              className="inline-block mb-2 font-mono font-semibold transition-opacity hover:opacity-70 text-ink text-[15px]"
-            >
-              contextforai
-            </a>
-            <p
-              className="leading-relaxed text-muted text-[13px] max-w-[200px]"
-            >
-              Clean structured data from any URL. Built for AI pipelines.
-            </p>
+            <Wordmark />
+            <p className="mt-3 max-w-[16rem] text-sm leading-relaxed text-[#f0f3f5]/70">Clean structured data from any URL. Built for AI pipelines.</p>
           </div>
-
-          {/* Link columns */}
           {Object.entries(LINKS).map(([section, items]) => (
             <div key={section}>
-              <p
-                className="font-mono uppercase mb-3 text-[10px] tracking-widest text-faint"
-              >
-                {section}
-              </p>
-              <ul className="space-y-2">
+              <p className="font-display text-base font-bold">{section}</p>
+              <ul className="mt-3 space-y-2.5">
                 {items.map((item) => (
                   <li key={item.href}>
-                    <a
-                      href={item.href}
-                      className="transition-colors duration-150 text-muted text-sm hover:text-ink"
-                    >
-                      {item.label}
-                    </a>
+                    <a href={item.href} className="text-sm text-[#f0f3f5]/70 transition-colors hover:text-white">{item.label}</a>
                   </li>
                 ))}
               </ul>
             </div>
           ))}
         </div>
-
-        {/* Bottom bar */}
-        <div
-          className="pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-t border-border"
-        >
-          <p
-            className="font-mono text-[11px] text-faint"
-          >
-            © {new Date().getFullYear()} contextforai · All rights reserved.
-          </p>
-        </div>
+        <p className="mt-12 border-t border-white/15 pt-6 text-sm text-[#f0f3f5]/60">© {new Date().getFullYear()} contextforai. All rights reserved.</p>
       </div>
     </footer>
   );

@@ -1,15 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { CookieConsent } from "@/components/cookie-consent";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "sileo";
 import "./globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const display = Bricolage_Grotesque({ variable: "--font-display", subsets: ["latin"], display: "swap" });
+const body = DM_Sans({ variable: "--font-body", subsets: ["latin"], display: "swap" });
 
 const SITE_URL = "https://contextforai.ashutoshswamy.in";
-const TITLE = "contextforai — Web Extraction API";
+const TITLE = "contextforai | URL to Markdown, JSON & Screenshot API";
 const DESCRIPTION =
-  "One API to extract Markdown, JSON, sitemaps, screenshots, and brand assets from any URL.";
+  "Extract clean Markdown, JSON, sitemaps, screenshots, fonts and brand assets from any URL with one API. 500 free credits, no card required.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -22,13 +25,13 @@ export const metadata: Metadata = {
     siteName: "contextforai",
     type: "website",
     locale: "en_US",
-    images: [{ url: "/og-image.png", width: 1731, height: 909, alt: TITLE }],
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: TITLE }],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
-    images: ["/og-image.png"],
+    images: ["/og-image.jpg"],
   },
   icons: {
     icon: [
@@ -44,14 +47,20 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0C0C0C",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F7F8FA" },
+    { media: "(prefers-color-scheme: dark)", color: "#0E1116" },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <ClerkProvider signInFallbackRedirectUrl="/dashboard" signUpFallbackRedirectUrl="/dashboard">
-      <html lang="en" className={`dark ${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
-        <body className="min-h-screen" suppressHydrationWarning>{children}</body>
+      <html lang="en" className={`${display.variable} ${body.variable}`} suppressHydrationWarning>
+        <body className="min-h-screen" suppressHydrationWarning>
+          <ThemeProvider>{children}<CookieConsent /></ThemeProvider>
+          <Toaster position="bottom-right" />
+        </body>
       </html>
     </ClerkProvider>
   );
