@@ -7,7 +7,6 @@ import PricingSection from "./components/PricingSection";
 import CTASection from "./components/CTASection";
 import Navbar from "./components/Navbar";
 import { pageMeta } from "@/lib/seo";
-import LandingMotion from "./components/landing/LandingMotion";
 
 export const metadata: Metadata = pageMeta({
   title: "contextforai | URL to Markdown, JSON & Screenshot API",
@@ -40,7 +39,6 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
       />
-      <LandingMotion>
       <Navbar />
       <main>
         <HeroText />
@@ -50,7 +48,6 @@ export default function Home() {
         <CTASection />
       </main>
       <Footer />
-      </LandingMotion>
     </div>
   );
 }

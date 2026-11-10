@@ -1,8 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
-import gsap from "gsap";
-import { useGSAP } from "@gsap/react";
+import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { useIsLoggedIn } from "./useIsLoggedIn";
 import { LINES } from "./landing/lines";
@@ -11,21 +9,8 @@ export default function HeroText() {
   const isLoggedIn = useIsLoggedIn();
   const [id, setId] = useState(LINES[0].id);
   const line = LINES.find((l) => l.id === id)!;
-  const section = useRef<HTMLElement>(null);
-  const first = useRef(true);
-
-  // Feedback: a new endpoint slides its response into the pane.
-  useGSAP(
-    () => {
-      if (first.current) { first.current = false; return; }
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-      gsap.fromTo("[data-resp]", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.5, ease: "expo.out", stagger: 0.05 });
-    },
-    { dependencies: [id], scope: section }
-  );
-
   return (
-    <section ref={section} className="bg-bg pt-3 sm:pt-6">
+    <section className="bg-bg pt-3 sm:pt-6">
       <div data-hero className="wall mx-auto max-w-[1400px] grid-cols-2 md:grid-cols-8 lg:grid-cols-7">
         {/* Headline pane */}
         <div className="pane rise order-1 col-span-2 md:col-span-8 flex min-h-[18rem] flex-col justify-end p-6 sm:p-10 lg:col-span-4 lg:col-start-1 lg:row-start-1 lg:min-h-[22rem]">
@@ -62,11 +47,11 @@ export default function HeroText() {
         {/* Response pane */}
         <div className="pane order-4 col-span-2 md:col-span-8 flex min-h-[20rem] flex-col lg:order-3 lg:col-span-3 lg:col-start-5 lg:row-span-2 lg:row-start-1">
           <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-4">
-            <span data-resp className="font-display text-lg font-bold">{line.method} {line.path}</span>
+            <span key={id} className="rise font-display text-lg font-bold">{line.method} {line.path}</span>
             <span className="inline-flex h-6 items-center bg-[var(--go)] px-2 text-xs font-bold text-[var(--bg)]">200 OK</span>
           </div>
           <p className="px-5 pt-4 text-sm font-semibold">Example response for example.com</p>
-          <pre data-resp className="min-w-0 overflow-auto whitespace-pre-wrap [overflow-wrap:anywhere] px-5 pb-5 pt-2 text-[0.95rem] leading-relaxed no-scrollbar" aria-live="polite">{line.sample}</pre>
+          <pre key={id + "p"} className="rise min-w-0 overflow-auto whitespace-pre-wrap [overflow-wrap:anywhere] px-5 pb-5 pt-2 text-[0.95rem] leading-relaxed no-scrollbar" aria-live="polite">{line.sample}</pre>
           <div className="mt-auto flex items-center justify-between gap-3 border-t border-border bg-raised px-5 py-4">
             <span className="text-sm text-muted">Charged for this call</span>
             <span className="credit-chip">{line.cost} credits</span>

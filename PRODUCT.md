@@ -26,7 +26,7 @@ Visitors read the landing page, try the playground, read docs, sign up via Clerk
 
 - Endpoints and credit cost: /v1/markdown, /v1/html, /v1/json, /v1/sitemap, /v1/fonts (5 credits each); /v1/screenshot, /v1/branding (10 credits each); /v1/usage.
 - Plans (INR): Free 500 credits/mo, 20 req/min; Starter Rs 499/mo 10,000 credits; Growth Rs 999/mo 50,000 credits; Pro Rs 1,999/mo 100,000 credits. Yearly prices exist (Rs 4,790 / 9,590 / 19,190).
-- Stack: Next.js 16 App Router, Tailwind v4, shadcn/ui (radix-nova), Clerk auth, GSAP. Site URL https://contextforai.ashutoshswamy.in.
+- Stack: Next.js 16 App Router, Tailwind v4, shadcn/ui (radix-nova), Clerk auth. Site URL https://contextforai.ashutoshswamy.in.
 - Routes to preserve: /, /docs, /playground, /sign-in, /sign-up, /privacy, /terms, /dashboard/{keys,usage,analytics,billing,playground}.
 
 ## Brand Commitments

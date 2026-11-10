@@ -1,7 +1,4 @@
-"use client";
-
-import { useRef, useEffect, type ReactNode } from "react";
-import gsap from "gsap";
+import type { ReactNode } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function AnimatedStat({
@@ -15,22 +12,6 @@ export default function AnimatedStat({
   unit: string;
   icon?: ReactNode;
 }) {
-  const numRef = useRef<HTMLSpanElement>(null);
-
-  useEffect(() => {
-    const obj = { val: 0 };
-    gsap.to(obj, {
-      val: value,
-      duration: 1.2,
-      ease: "power2.out",
-      onUpdate() {
-        if (numRef.current) {
-          numRef.current.textContent = Math.round(obj.val).toLocaleString();
-        }
-      },
-    });
-  }, [value]);
-
   return (
     <Card className="border-border p-5 gap-0">
       <CardContent className="p-0">
@@ -39,7 +20,7 @@ export default function AnimatedStat({
           {icon && <span className="text-ember">{icon}</span>}
         </div>
         <p className="text-2xl font-mono font-bold text-ink">
-          <span ref={numRef}>0</span>
+          {value.toLocaleString()}
         </p>
         <p className="text-xs text-faint mt-0.5">{unit}</p>
       </CardContent>
